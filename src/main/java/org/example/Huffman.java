@@ -61,7 +61,7 @@ public class Huffman {
         return index;
     }
 
-    public void huffmanTree(String text){
+    public void huffmanTreeCoding(String text){
         String[] parts = text.split("[,\\s]+");// Все слова
         Set<String> combination = new LinkedHashSet<>(Arrays.asList(parts));// уникальные слова
         Map<String, Integer> freqCombination = new HashMap<>();
@@ -90,11 +90,7 @@ public class Huffman {
                 if (freqCombination.containsKey(stringBuilder.toString()) ) {
                     freqCombination.put(stringBuilder.toString(), freqCombination.get(stringBuilder.toString()) + 1);
                 }
-                /*if (freqCombination.get(stringBuilder.toString()) > 1) {
-                    for (Character character : ch) {
-                        freq.put(character, freq.get(character) - freqCombination.get(stringBuilder.toString()));
-                    }
-                }*/
+
                 stringBuilder.delete(0, stringBuilder.length());
                 ch.clear();
             }
@@ -179,7 +175,7 @@ public class Huffman {
 
         int index = -1;
         StringBuilder dec = new StringBuilder();
-        long end = System.currentTimeMillis();
+
         while (index < sb.length() - 1) {
             index = decode(root, index, sb,dec);
         }
@@ -188,10 +184,11 @@ public class Huffman {
         sb.delete(0, sb.length());
 
     }
-    public int getEncodingLength(String text) {
-        return text.length();
-    }
-    public int getDecodingLength(String text) {
-        return text.length();
+
+    public void huffmanTreeDecode(String text) {
+        String[] str = text.split("/");
+        String huffmanCode = str[0];
+        String freq = str[1];
+
     }
 }
