@@ -1,5 +1,9 @@
 package org.example;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -39,7 +43,7 @@ public class Huffman {
     }
 
     // traverse the Huffman Tree and decode the encoded string
-    public  int decode(Node root, int index, StringBuilder sb, StringBuilder dec) {
+    public  int decode(Node root, int index, String sb, StringBuilder dec) {
         if (root == null)
             return index;
 
@@ -61,7 +65,7 @@ public class Huffman {
         return index;
     }
 
-    public void huffmanTreeCoding(String text){
+    public String huffmanTreeCoding(String text){
         String[] parts = text.split("[,\\s]+");// Все слова
         Set<String> combination = new LinkedHashSet<>(Arrays.asList(parts));// уникальные слова
         Map<String, Integer> freqCombination = new HashMap<>();
@@ -114,26 +118,8 @@ public class Huffman {
         //System.out.println(freqCombination);
 
 
-        PriorityQueue<Node> pq = new PriorityQueue<>(
-                (l, r) -> l.freq - r.freq);
 
-
-        for (Map.Entry<String, Integer> entry : freqCombination.entrySet()) {
-            pq.add(new Node(entry.getKey(), entry.getValue()));
-        }
-
-        while (pq.size() != 1)
-        {
-
-            Node left = pq.poll();
-            Node right = pq.poll();
-
-
-            int sum = left.freq + right.freq;
-            pq.add(new Node("\u0000", sum, left, right));
-        }
-
-        Node root = pq.peek();
+        Node root = buildHuffmanTree(freqCombination);
 
         Map<String, String> huffmanCode = new HashMap<>();
         coding(root, "", huffmanCode);
@@ -142,7 +128,7 @@ public class Huffman {
 
 
 
-        // print encoded string
+        // создание сжатого кода
         StringBuilder string = new StringBuilder();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < text.length(); i++) {
@@ -166,29 +152,85 @@ public class Huffman {
 
 
         }
-        byte[] bytes = sb.toString().getBytes(StandardCharsets.UTF_8);
-        int sizeInBytes = bytes.length;
-        System.out.println("Размер текста в байтах: " + sizeInBytes);
 
+
+        StringBuilder table = new StringBuilder();
+        char symbol = '{'; // Ваш символ
+        sb.append(String.format("%8s",Integer.toBinaryString((int) symbol & 0xFF)).replace(' ', '0'));
+        for (Map.Entry<String,Integer> entry : freqCombination.entrySet()) {
+            byte[] keys = entry.getKey().getBytes(StandardCharsets.UTF_8);
+            for (byte b : keys) {
+                table.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
+            }
+
+            table.append(String.format("%8s", Integer.toBinaryString(entry.getValue() & 0xFF)).replace(' ', '0'));
+        }
+        symbol = '}';
+        sb.append(String.format("%8s",Integer.toBinaryString((int) symbol & 0xFF)).replace(' ', '0'));
         ///////////////////////////////////////////////////////////////////////
+
+
+
+        return sb.toString();
+    }
+
+
+    public String huffmanTreeDecode(String text) {
+        StringBuilder huffmanCodeSb = new StringBuilder();
+        StringBuilder map = new StringBuilder();
+        HashMap<String, Integer> freq = new HashMap<>();
+
+        for (int i = text.length() - 1; i >= 0; i--) {
+            if (text.substring(i - 7, i + 1).equals(String.format("%8s",Integer.toBinaryString((int) '}' & 0xFF)).replace(' ', '0'))) {
+
+            }
+        }
+        //String[] str = text.split("/");
+        //String huffmanCode = str[0];
+        //String jsonData = str[1];
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<HashMap<String, Integer>>() {}.getType();
+        HashMap<String, Integer> freq = new HashMap<>();
+        freq = gson.fromJson(jsonData, type);
+
+        Node root = buildHuffmanTree(freq);
 
 
         int index = -1;
         StringBuilder dec = new StringBuilder();
 
-        while (index < sb.length() - 1) {
-            index = decode(root, index, sb,dec);
+        while (index < huffmanCode.length() - 1) {
+            index = decode(root, index, huffmanCode,dec);
         }
-
         System.out.println(dec);
-        sb.delete(0, sb.length());
 
+
+
+        return dec.toString();
     }
 
-    public void huffmanTreeDecode(String text) {
-        String[] str = text.split("/");
-        String huffmanCode = str[0];
-        String freq = str[1];
+    public Node buildHuffmanTree(Map<String, Integer> freq) {
+        PriorityQueue<Node> pq = new PriorityQueue<>(
+                (l, r) -> l.freq - r.freq);
 
+
+        for (Map.Entry<String, Integer> entry : freq.entrySet()) {
+            pq.add(new Node(entry.getKey(), entry.getValue()));
+        }
+
+        while (pq.size() != 1)
+        {
+
+            Node left = pq.poll();
+            Node right = pq.poll();
+
+
+            int sum = left.freq + right.freq;
+            pq.add(new Node("\u0000", sum, left, right));
+        }
+
+        Node root = pq.peek();
+        return root;
     }
 }
