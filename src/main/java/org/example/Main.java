@@ -16,6 +16,14 @@ public class Main {
         int sizeInBytes = bytes.length;
         System.out.println("Размер текста в байтах: " + sizeInBytes);*/
 
+        String txt = "101001100111111010100101";
+        String targetSubstring = "01111110";
+
+        int index = txt.indexOf(targetSubstring);
+       // System.out.println("Подстрока '" + targetSubstring + "' найдена в позиции: " + index);
+
+
+
         Huffman huffman = new Huffman();
         huffman.huffmanTreeDecode(huffman.huffmanTreeCoding(text));
     }
