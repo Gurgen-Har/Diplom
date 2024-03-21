@@ -165,6 +165,7 @@ public class Huffman {
 
             table.append(String.format("%8s", Integer.toBinaryString(entry.getValue() & 0xFF)).replace(' ', '0'));
         }
+        sb.append(table);
         symbol = '}';
         sb.append(String.format("%8s",Integer.toBinaryString((int) symbol & 0xFF)).replace(' ', '0'));
         ///////////////////////////////////////////////////////////////////////
@@ -179,20 +180,27 @@ public class Huffman {
         StringBuilder huffmanCodeSb = new StringBuilder();
         StringBuilder map = new StringBuilder();
         HashMap<String, Integer> freq = new HashMap<>();
+        int i = text.length() - 1;
 
-        for (int i = text.length() - 1; i >= 0; i--) {
-            if (text.substring(i - 7, i + 1).equals(String.format("%8s",Integer.toBinaryString((int) '}' & 0xFF)).replace(' ', '0'))) {
+        StringBuilder utf8Symbol = new StringBuilder(new String(new int[]{
+                Integer.parseInt(text.substring(i - 7, i + 1), 2)
+        }, 0, 1));
+
+        if (utf8Symbol.toString().equals("}")) {
+
+            while (!utf8Symbol.toString().equals("{")) {
+                utf8Symbol.delete(0, utf8Symbol.length());
+                i -= 8;
+                utf8Symbol = new StringBuilder(new String(new int[]{
+                        Integer.parseInt(text.substring(i - 7, i + 1), 2)
+                }, 0, 1));
 
             }
+            map.append(text, i + 1, text.length() - 8);
         }
-        //String[] str = text.split("/");
-        //String huffmanCode = str[0];
-        //String jsonData = str[1];
+        huffmanCodeSb.append(text, 0, i - 7);
 
-        Gson gson = new Gson();
-        Type type = new TypeToken<HashMap<String, Integer>>() {}.getType();
-        HashMap<String, Integer> freq = new HashMap<>();
-        freq = gson.fromJson(jsonData, type);
+        /*
 
         Node root = buildHuffmanTree(freq);
 
@@ -204,10 +212,10 @@ public class Huffman {
             index = decode(root, index, huffmanCode,dec);
         }
         System.out.println(dec);
+*/
 
 
-
-        return dec.toString();
+        return "";
     }
 
     public Node buildHuffmanTree(Map<String, Integer> freq) {
