@@ -180,26 +180,55 @@ public class Huffman {
         StringBuilder huffmanCodeSb = new StringBuilder();
         StringBuilder map = new StringBuilder();
         HashMap<String, Integer> freq = new HashMap<>();
-        int i = text.length() - 1;
+        int iteration = text.length() - 1;
 
         StringBuilder utf8Symbol = new StringBuilder(new String(new int[]{
-                Integer.parseInt(text.substring(i - 7, i + 1), 2)
+                Integer.parseInt(text.substring(iteration - 7, iteration + 1), 2)
         }, 0, 1));
 
-        if (utf8Symbol.toString().equals("}")) {
+        if (utf8Symbol.toString().equals("}")) { //заменить { и } на // между кодом и таблицей
 
             while (!utf8Symbol.toString().equals("{")) {
                 utf8Symbol.delete(0, utf8Symbol.length());
-                i -= 8;
+                iteration -= 8;
                 utf8Symbol = new StringBuilder(new String(new int[]{
-                        Integer.parseInt(text.substring(i - 7, i + 1), 2)
+                        Integer.parseInt(text.substring(iteration - 7, iteration + 1), 2)
                 }, 0, 1));
 
             }
-            map.append(text, i + 1, text.length() - 8);
+            map.append(text, iteration + 1, text.length() - 8);
         }
-        huffmanCodeSb.append(text, 0, i - 7);
+        huffmanCodeSb.append(text, 0, iteration - 7);
+        // разделителем внутри таблицы являет \ с кодом 01011100
+        // также если число превышает 8 бит вставляем указатель
 
+        iteration = map.length();
+        while (iteration > 0) {
+            String num;
+            String string;
+            StringBuilder resultString = new StringBuilder();
+
+            if (!map.substring(iteration - 16, iteration - 8).equals("00000000")) { //поменять место нахождение разделителя на конец числа, а не между двух байт
+                num = map.substring(iteration - 8, iteration);
+                iteration -= 8;
+            } else {
+                num = map.substring(iteration - 16, iteration);
+                iteration -= 16;
+            }
+            int i = 0;
+            while (!map.substring(iteration - 8 - i * 8, iteration - i * 8).equals("01011100")) {
+                i++;
+            }
+            string = map.substring(iteration - i * 8, iteration);
+            iteration -= 8 - i * 8;
+            for (int j = 0; j < string.length() / 8; j += 8) {
+                resultString.append(new String(new int[]{
+                        Integer.parseInt(string.substring(j, j + 8), 2)
+                }, 0, 1));
+            }
+            freq.put(resultString.toString(), Integer.parseInt(num, 2));
+
+        }
         /*
 
         Node root = buildHuffmanTree(freq);
