@@ -25,6 +25,7 @@ public class Main {
 
 
         Huffman huffman = new Huffman();
-        huffman.huffmanTreeDecode(huffman.huffmanTreeCoding(text));
+       // huffman.huffmanTreeCoding("aabacdab");
+        //huffman.huffmanTreeDecode(huffman.huffmanTreeCoding(text));
     }
 }
