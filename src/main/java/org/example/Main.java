@@ -1,5 +1,9 @@
 package org.example;
 
+import org.example.Static.HuffmanStatic;
+import org.example.Static.HuffmanStaticCoding;
+import org.example.Static.HuffmanStaticDecode;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,8 +28,14 @@ public class Main {
 
 
 
-        Huffman huffman = new Huffman();
-       // huffman.huffmanTreeCoding("aabacdab");
+        //Huffman huffman = new Huffman();
+        //huffman.huffmanTreeCoding("aabacdab");
         //huffman.huffmanTreeDecode(huffman.huffmanTreeCoding(text));
+
+        HuffmanStaticCoding huffmanStaticCoding = new HuffmanStaticCoding(text);
+        huffmanStaticCoding.createFreq();
+        String tex = huffmanStaticCoding.compress();
+        HuffmanStaticDecode dec = new HuffmanStaticDecode(tex);
+        dec.dataPreparation(tex);
     }
 }

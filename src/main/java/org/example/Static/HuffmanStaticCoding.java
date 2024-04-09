@@ -58,19 +58,22 @@ public class HuffmanStaticCoding extends HuffmanStatic {
 
 
         StringBuilder table = new StringBuilder();
-        char symbol = '{'; // Ваш символ
-        sb.append(String.format("%8s",Integer.toBinaryString((int) symbol & 0xFF)).replace(' ', '0'));
+        String regex = "11111111"; // Ваш символ
+        sb.append(regex);
         for (Map.Entry<String,Integer> entry : freq.entrySet()) {
             byte[] keys = entry.getKey().getBytes(StandardCharsets.UTF_8);
             for (byte b : keys) {
                 table.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
             }
 
+
             table.append(String.format("%8s", Integer.toBinaryString(entry.getValue() & 0xFF)).replace(' ', '0'));
+            table.append("01011100");
         }
+        table.delete(table.length() - 8, table.length());
         sb.append(table);
-        symbol = '}';
-        sb.append(String.format("%8s",Integer.toBinaryString((int) symbol & 0xFF)).replace(' ', '0'));
+
+
         ///////////////////////////////////////////////////////////////////////
         output = sb.toString();
         return output;

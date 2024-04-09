@@ -68,8 +68,8 @@ public class Huffman {
     public String huffmanTreeCoding(String text){
         String[] parts = text.split("[,\\s]+");// Все слова
         Set<String> combination = new LinkedHashSet<>(Arrays.asList(parts));// уникальные слова
-        Map<String, Integer> freqCombination = new HashMap<>();
-        Map<Character, Integer> freq = new HashMap<>();
+        Map<String, Integer> freqCombination = new LinkedHashMap<>();
+        Map<Character, Integer> freq = new LinkedHashMap<>();
         List<Character> ch = new ArrayList<>();
 
 
@@ -153,21 +153,32 @@ public class Huffman {
 
         }
 
+        /*int index = -1;
+        StringBuilder dec = new StringBuilder();
 
+        while (index < sb.length() - 1) {
+            index = decode(root, index, sb.toString(),dec);
+        }
+        System.out.println(dec);
+
+        System.out.println(freqCombination);*/
         StringBuilder table = new StringBuilder();
-        char symbol = '{'; // Ваш символ
-        sb.append(String.format("%8s",Integer.toBinaryString((int) symbol & 0xFF)).replace(' ', '0'));
+        String regex = "11111111"; // Ваш символ
+        sb.append(regex);
         for (Map.Entry<String,Integer> entry : freqCombination.entrySet()) {
             byte[] keys = entry.getKey().getBytes(StandardCharsets.UTF_8);
             for (byte b : keys) {
                 table.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
             }
 
+
             table.append(String.format("%8s", Integer.toBinaryString(entry.getValue() & 0xFF)).replace(' ', '0'));
+            table.append("01011100");
         }
+        table.delete(table.length() - 8, table.length());
         sb.append(table);
-        symbol = '}';
-        sb.append(String.format("%8s",Integer.toBinaryString((int) symbol & 0xFF)).replace(' ', '0'));
+
+        System.out.println(sb.length());
         ///////////////////////////////////////////////////////////////////////
 
 
@@ -179,72 +190,72 @@ public class Huffman {
     public String huffmanTreeDecode(String text) {
         StringBuilder huffmanCodeSb = new StringBuilder();
         StringBuilder map = new StringBuilder();
-        HashMap<String, Integer> freq = new HashMap<>();
-        int iteration = text.length() - 1;
+        HashMap<String, Integer> freq = new LinkedHashMap<>();
 
-        StringBuilder utf8Symbol = new StringBuilder(new String(new int[]{
-                Integer.parseInt(text.substring(iteration - 7, iteration + 1), 2)
-        }, 0, 1));
 
-        if (utf8Symbol.toString().equals("}")) { //заменить { и } на // между кодом и таблицей
+        int index = text.indexOf("11111111");
 
-            while (!utf8Symbol.toString().equals("{")) {
-                utf8Symbol.delete(0, utf8Symbol.length());
-                iteration -= 8;
-                utf8Symbol = new StringBuilder(new String(new int[]{
-                        Integer.parseInt(text.substring(iteration - 7, iteration + 1), 2)
-                }, 0, 1));
 
-            }
-            map.append(text, iteration + 1, text.length() - 8);
-        }
-        huffmanCodeSb.append(text, 0, iteration - 7);
+        huffmanCodeSb.append(text, 0, index);
+        map.append(text, index + 8, text.length());
+
         // разделителем внутри таблицы являет \ с кодом 01011100
-        // также если число превышает 8 бит вставляем указатель
+        // также если число превышает 8 бит вставляем указатель в конец цифры
 
-        iteration = map.length();
+        int iteration = map.length();
         while (iteration > 0) {
             String num;
             String string;
             StringBuilder resultString = new StringBuilder();
 
-            if (!map.substring(iteration - 16, iteration - 8).equals("00000000")) { //поменять место нахождение разделителя на конец числа, а не между двух байт
+            if (!map.substring(iteration - 8, iteration).equals("00000000")) { //поменять место нахождение разделителя на конец числа, а не между двух байт
                 num = map.substring(iteration - 8, iteration);
                 iteration -= 8;
             } else {
-                num = map.substring(iteration - 16, iteration);
-                iteration -= 16;
+                num = map.substring(iteration - 24, iteration - 8);
+                iteration -= 24;
             }
             int i = 0;
-            while (!map.substring(iteration - 8 - i * 8, iteration - i * 8).equals("01011100")) {
+            while (!map.substring(iteration - 8 - i * 8, iteration - i * 8).equals("01011100")
+                    && iteration - 8 - i * 8 != 0) {
                 i++;
             }
-            string = map.substring(iteration - i * 8, iteration);
-            iteration -= 8 - i * 8;
-            for (int j = 0; j < string.length() / 8; j += 8) {
+            if (iteration - 8 - i * 8 != 0) {
+                string = map.substring(iteration - i * 8, iteration);
+            } else {
+                string = map.substring(0, iteration);
+            }
+            iteration = iteration - 8 - i * 8;
+            for (int j = 0; j < string.length() / 8; j ++) {
                 resultString.append(new String(new int[]{
-                        Integer.parseInt(string.substring(j, j + 8), 2)
+                        Integer.parseInt(string.substring(j * 8, j * 8 + 8), 2)
                 }, 0, 1));
             }
             freq.put(resultString.toString(), Integer.parseInt(num, 2));
 
         }
-        /*
 
-        Node root = buildHuffmanTree(freq);
+        List<Map.Entry<String, Integer>> entries = new ArrayList<>(freq.entrySet());
+        Collections.reverse(entries);
 
+        LinkedHashMap<String, Integer> reversedMap = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : entries) {
+            reversedMap.put(entry.getKey(), entry.getValue());
+        }
+        Node root = buildHuffmanTree(reversedMap);
 
-        int index = -1;
+        System.out.println(freq);
+        index = -1;
         StringBuilder dec = new StringBuilder();
 
-        while (index < huffmanCode.length() - 1) {
-            index = decode(root, index, huffmanCode,dec);
+        while (index < huffmanCodeSb.length() - 1) {
+            index = decode(root, index, huffmanCodeSb.toString(),dec);
         }
         System.out.println(dec);
-*/
 
 
-        return "";
+
+        return dec.toString();
     }
 
     public Node buildHuffmanTree(Map<String, Integer> freq) {

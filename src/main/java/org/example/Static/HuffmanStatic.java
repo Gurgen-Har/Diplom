@@ -15,7 +15,7 @@ public class HuffmanStatic {
         this.text = text;
     }
 
-    public void createFreq(String text) {
+    public void createFreq() {
         String[] parts = text.split("[,\\s]+");// Все слова
         Set<String> combination = new LinkedHashSet<>(Arrays.asList(parts));// уникальные слова
         Map<String, Integer> freqCombination = new HashMap<>();
