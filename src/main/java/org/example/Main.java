@@ -1,13 +1,15 @@
 package org.example;
 
-import org.example.Static.HuffmanStatic;
-import org.example.Static.HuffmanStaticCoding;
-import org.example.Static.HuffmanStaticDecode;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.example.Dynamic.HuffmanDynamic;
+import org.example.Node;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
@@ -32,10 +34,35 @@ public class Main {
         //huffman.huffmanTreeCoding("aabacdab");
         //huffman.huffmanTreeDecode(huffman.huffmanTreeCoding(text));
 
-        HuffmanStaticCoding huffmanStaticCoding = new HuffmanStaticCoding(text);
+        /*HuffmanDynamicCoding huffmanStaticCoding = new HuffmanDynamicCoding(text);
         huffmanStaticCoding.createFreq();
         String tex = huffmanStaticCoding.compress();
-        HuffmanStaticDecode dec = new HuffmanStaticDecode(tex);
-        dec.dataPreparation(tex);
+        HuffmanDynamicDecode dec = new HuffmanDynamicDecode(tex);
+        dec.dataPreparation(tex);*/
+        String json = "";
+        try {
+            json = new String(Files.readAllBytes(Paths.get("B:\\Users\\Gurgen\\Downloads\\Diplom\\Data.json")));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // Создание объекта Gson
+        Gson gson = new Gson();
+
+        // Получение типа для десериализации
+        java.lang.reflect.Type type = new TypeToken<HashMap<String, Integer>>(){}.getType();
+
+        // Преобразование JSON в HashMap
+        HashMap<String, Integer> hashMap = gson.fromJson(json, type);
+        Node root = HuffmanDynamic.buildHuffmanTree(hashMap);
+        String jjson = gson.toJson(root);
+
+        // Запись JSON строки в файл
+        try (FileWriter writer = new FileWriter("Node.json")) {
+            writer.write(jjson);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

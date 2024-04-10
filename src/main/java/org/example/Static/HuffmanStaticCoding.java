@@ -1,35 +1,12 @@
 package org.example.Static;
 
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
+public class HuffmanStaticCoding extends HuffmanStatic{
 
-public class HuffmanStaticCoding extends HuffmanStatic {
-
-    String output;
     public HuffmanStaticCoding(String text) {
         super(text);
     }
-    public void coding(Node root, String str,
-                       Map<String, String> huffmanCode) {
-        if (root == null)
-            return;
-
-        // found a leaf node
-        if (root.left == null && root.right == null) {
-            huffmanCode.put(root.str, str);
-        }
-
-
-        coding(root.left, str + "0", huffmanCode);
-        coding(root.right, str + "1", huffmanCode);
-    }
 
     public String compress() {
-        Map<String, String> huffmanCode = new HashMap<>();
-        coding(root, "", huffmanCode);
-
-
         StringBuilder string = new StringBuilder();
         StringBuilder sb = new StringBuilder();
 
@@ -39,7 +16,7 @@ public class HuffmanStaticCoding extends HuffmanStatic {
                     && text.charAt(i) != '?') {
                 string.append(text.charAt(i));
             } else {
-                if (freq.containsKey(string.toString())) {
+                if (huffmanCode.containsKey(string.toString())) {
                     sb.append(huffmanCode.get(string.toString()));
                     string.delete(0, string.length());
                 } else {
@@ -55,28 +32,6 @@ public class HuffmanStaticCoding extends HuffmanStatic {
 
         }
 
-
-
-        StringBuilder table = new StringBuilder();
-        String regex = "11111111"; // Ваш символ
-        sb.append(regex);
-        for (Map.Entry<String,Integer> entry : freq.entrySet()) {
-            byte[] keys = entry.getKey().getBytes(StandardCharsets.UTF_8);
-            for (byte b : keys) {
-                table.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
-            }
-
-
-            table.append(String.format("%8s", Integer.toBinaryString(entry.getValue() & 0xFF)).replace(' ', '0'));
-            table.append("01011100");
-        }
-        table.delete(table.length() - 8, table.length());
-        sb.append(table);
-
-
-        ///////////////////////////////////////////////////////////////////////
-        output = sb.toString();
-        return output;
+        return sb.toString();
     }
-
 }

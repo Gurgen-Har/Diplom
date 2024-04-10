@@ -1,31 +1,11 @@
 package org.example;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import org.example.Node;
 
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-class Node
-{
-    String str;
-    int freq;
-    Node left = null, right = null;
-
-    Node(String str, int freq)
-    {
-        this.str = str;
-        this.freq = freq;
-    }
-
-    public Node(String str, int freq, Node left, Node right) {
-        this.str = str;
-        this.freq = freq;
-        this.left = left;
-        this.right = right;
-    }
-};
+;
 public class Huffman {
     public void coding(Node root, String str,
                        Map<String, String> huffmanCode) {

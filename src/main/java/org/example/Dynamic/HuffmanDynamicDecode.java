@@ -1,14 +1,16 @@
-package org.example.Static;
+package org.example.Dynamic;
 
+
+import org.example.Node;
 
 import java.util.*;
 
-public class HuffmanStaticDecode extends HuffmanStatic{
-    public HuffmanStaticDecode(String text) {
+public class HuffmanDynamicDecode extends HuffmanDynamic {
+    public HuffmanDynamicDecode(String text) {
         super(text);
     }
 
-    public  int decode(Node root, int index, String sb, StringBuilder dec) {
+    public static int decode(Node root, int index, String sb, StringBuilder dec) {
         if (root == null)
             return index;
 
@@ -96,8 +98,6 @@ public class HuffmanStaticDecode extends HuffmanStatic{
         }
         System.out.println(dec);
 
-        String output = dec.toString();
-
-        return output;
+        return dec.toString();
     }
 }
