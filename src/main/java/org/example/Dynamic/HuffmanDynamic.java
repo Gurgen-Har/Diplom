@@ -36,8 +36,10 @@ public class HuffmanDynamic {
             freqSymbol.put(text.charAt(i), freqSymbol.get(text.charAt(i)) + 1);
         }
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) != ' ' && text.charAt(i) != ',') {
+        for (int i = 0; i <= text.length(); i++) {
+            if (i < text.length() && text.charAt(i) != ' ' && text.charAt(i) != ','
+                    && text.charAt(i) != '.' && text.charAt(i) != '!'
+                    && text.charAt(i) != '?') {
                 ch.add(text.charAt(i));
             } else if(ch.size() > 0) {
                 for (Character character : ch) {
@@ -52,7 +54,7 @@ public class HuffmanDynamic {
             }
         }
         for (Map.Entry<String, Integer> entry : freqCombination.entrySet()) {
-            if (entry.getValue() > 1) {
+            if (entry.getValue() > 50) {
                 String str = entry.getKey();
                 for (int i = 0; i < str.length(); i++) {
                     freqSymbol.put(str.charAt(i), freqSymbol.get(str.charAt(i)) - entry.getValue());

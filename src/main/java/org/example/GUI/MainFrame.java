@@ -33,6 +33,7 @@ public class MainFrame extends JFrame {
     private JPanel mainPanel = new JPanel(cardLayout);
     private HuffmanDynamicPanel huffmanDynamicPanel = new HuffmanDynamicPanel();
     private HuffmanStaticPanel huffmanStaticPanel = new HuffmanStaticPanel();
+    private HuffmanClassicPanel huffmanClassicPanel = new HuffmanClassicPanel();
     public MainFrame() {
         setTitle("CCSD Laboratory");
         setMinimumSize(new Dimension(600, 400));
@@ -43,6 +44,7 @@ public class MainFrame extends JFrame {
 
         mainPanel.add(huffmanDynamicPanel, "1");
         mainPanel.add(huffmanStaticPanel, "2");
+        mainPanel.add(huffmanClassicPanel, "2");
 
 
         cardLayout.show(mainPanel, "1");
@@ -172,7 +174,7 @@ public class MainFrame extends JFrame {
                         encoder.createFreq();
                         String output = encoder.compress();
 
-                        Path outputPath = Paths.get("E:\\Dat\\"+inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + ".hs");
+                        Path outputPath = Paths.get("C:\\Users\\gugo1\\Downloads\\dat\\"+inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + ".hs");
                         try {
                             Files.writeString(outputPath, output); // Запись содержимого в файл
                             System.out.println("Содержимое успешно записано в файл " + outputPath);
@@ -196,7 +198,7 @@ public class MainFrame extends JFrame {
                         }
                         decoder = new HuffmanDynamicDecode(text);
                         String output = decoder.dataPreparation(text);
-                        Path outputPath = Paths.get("E:\\Dat\\"+inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + "hsDec.txt");
+                        Path outputPath = Paths.get("C:\\Users\\gugo1\\Downloads\\dat\\"+inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + "hsDec.txt");
                         try {
                             Files.writeString(outputPath, output); // Запись содержимого в файл
                             System.out.println("Содержимое успешно записано в файл " + outputPath);
@@ -304,7 +306,7 @@ public class MainFrame extends JFrame {
                         encoder = new HuffmanClassicCoding(text);
                         encoder.freqAndTree();
                         String output = encoder.compress();
-                        Path outputPath = Paths.get(inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + ".hs");
+                        Path outputPath = Paths.get("C:\\Users\\gugo1\\Downloads\\dat\\"+inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + ".hs");
                         try {
                             Files.writeString(outputPath, output); // Запись содержимого в файл
                             System.out.println("Содержимое успешно записано в файл " + outputPath);

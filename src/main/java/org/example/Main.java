@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
-        String text = "This is an example of text, with, commas, and spaces This is an example with commas";
+        String text = "This is an example of text, with, commas, and spaces This is an example with commas ";
         HuffmanDynamicCoding huf = new HuffmanDynamicCoding(text);
         //System.out.println(text);
         huf.createFreq();
@@ -24,5 +24,6 @@ public class Main {
         //System.out.println(huf.compress());
         String str = hufm.dataPreparation(gg);
         System.out.println(str);
+
     }
 }
