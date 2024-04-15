@@ -93,7 +93,7 @@ public class MainFrame extends JFrame {
 
     private class Toolbar extends JPanel {
         JButton openFileButton = new JButton("Open File");
-        JComboBox<String> comboBox = new JComboBox<>(new String[]{"HuffmanStatic", "HuffmanDynamic", "HuffmanClassic"});
+        JComboBox<String> comboBox = new JComboBox<>(new String[]{"HuffmanDynamic", "HuffmanStatic", "HuffmanClassic"});
         JFileChooser fileChooser;
 
         public Toolbar() {
@@ -167,10 +167,12 @@ public class MainFrame extends JFrame {
                             // Обработка ошибок чтения файла
                             ex.printStackTrace();
                         }
-                        encoder = new HuffmanDynamicCoding(text);
+
+                        encoder = new HuffmanDynamicCoding(text + " ");
                         encoder.createFreq();
                         String output = encoder.compress();
-                        Path outputPath = Paths.get(inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + ".hs");
+
+                        Path outputPath = Paths.get("E:\\Dat\\"+inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + ".hs");
                         try {
                             Files.writeString(outputPath, output); // Запись содержимого в файл
                             System.out.println("Содержимое успешно записано в файл " + outputPath);
@@ -185,7 +187,23 @@ public class MainFrame extends JFrame {
                 huffmanDecodeButton.addActionListener(e -> {
                     statusBar.leftStatus.setText("Decoding. Please wait...");
                     EventQueue.invokeLater(new Thread(() -> {
+                        String text = "";
+                        try {
+                            text = Files.readString(inputPath, StandardCharsets.UTF_8);
 
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        decoder = new HuffmanDynamicDecode(text);
+                        String output = decoder.dataPreparation(text);
+                        Path outputPath = Paths.get("E:\\Dat\\"+inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + "hsDec.txt");
+                        try {
+                            Files.writeString(outputPath, output); // Запись содержимого в файл
+                            System.out.println("Содержимое успешно записано в файл " + outputPath);
+                        } catch (IOException ex) {
+                            // Обработка ошибок записи файла
+                            ex.printStackTrace();
+                        }
                     }));
                 });
 
