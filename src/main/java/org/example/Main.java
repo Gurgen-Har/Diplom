@@ -29,12 +29,19 @@ public class Main {
         //System.out.println(huf.compress());
         String str = hufm.dataPreparation(gg);
         System.out.println(str);*/
-        Path inputPath = Paths.get("E:\\Dat\\dec.txt");
+        HuffmanClassicCoding huffmanClassic = new HuffmanClassicCoding(text);
+        huffmanClassic.freqAndTree();
+        String out = huffmanClassic.compress();
+        HuffmanClassicDecode huffmanClassicDecode = new HuffmanClassicDecode(out);
+
+        System.out.println(huffmanClassicDecode.decompress());
+
+        /*Path inputPath = Paths.get("E:\\Dat\\dec.txt");
         String tex = Files.readString(inputPath, StandardCharsets.UTF_8);
         HuffmanClassicCoding huffmanClassicCoding = new HuffmanClassicCoding(tex);
         huffmanClassicCoding.freqAndTree();
         String out = huffmanClassicCoding.compress();
         Path outputPath = Paths.get("E:\\Dat\\dec1.txt");
-        Files.writeString(outputPath, out);
+        Files.writeString(outputPath, out);*/
     }
 }

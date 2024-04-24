@@ -45,10 +45,13 @@ public class HuffmanClassic {
             size--;
         }
 
+        freq.clear();
+        freq = freqSorted;
+        this.root = buildHuffmanTree(freqSorted);
+    }
 
-
-
-
+    private Node buildHuffmanTree(LinkedHashMap<Character, Integer> freqSorted) {
+        Node root;
         PriorityQueue<Node> pq = new PriorityQueue<>(
                 (l, r) -> l.freq - r.freq);
 
@@ -68,6 +71,7 @@ public class HuffmanClassic {
             pq.add(new Node('\0', sum, left, right));
         }
 
-        this.root = pq.peek();
+        root = pq.peek();
+        return root;
     }
 }
