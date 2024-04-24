@@ -2,9 +2,7 @@ package org.example.Classic;
 
 import org.example.Node;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class HuffmanClassic {
     Map<Character, Integer> freq;
@@ -25,11 +23,37 @@ public class HuffmanClassic {
         }
 
 
+
+        List<Map.Entry<Character, Integer>> list = new ArrayList<>(freq.entrySet());
+
+        Collections.sort(list, new Comparator<Map.Entry<Character, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Character, Integer> o1, Map.Entry<Character, Integer> o2) {
+                // Сравниваем значения в обратном порядке
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+
+        LinkedHashMap<Character, Integer> freqSorted = new LinkedHashMap<>();
+        for (Map.Entry<Character, Integer> entry : list) {
+            freqSorted.put(entry.getKey(), entry.getValue());
+        }
+        int size = freqSorted.size();
+        for (Map.Entry<Character, Integer> entry : freqSorted.entrySet()) {
+            Character key = entry.getKey();
+            freqSorted.put(key, size);
+            size--;
+        }
+
+
+
+
+
         PriorityQueue<Node> pq = new PriorityQueue<>(
                 (l, r) -> l.freq - r.freq);
 
 
-        for (Map.Entry<Character, Integer> entry : freq.entrySet()) {
+        for (Map.Entry<Character, Integer> entry : freqSorted.entrySet()) {
             pq.add(new Node(entry.getKey(), entry.getValue()));
         }
 

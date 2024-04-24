@@ -37,6 +37,7 @@ public class HuffmanClassicCoding extends HuffmanClassic {
         for (int i = 0 ; i < text.length(); i++) {
             sb.append(huffmanCode.get(text.charAt(i)));
         }
+
         return sb.toString();
     }
 }

@@ -36,8 +36,10 @@ public class HuffmanDynamic {
             freqSymbol.put(text.charAt(i), freqSymbol.get(text.charAt(i)) + 1);
         }
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) != ' ' && text.charAt(i) != ',') {
+        for (int i = 0; i <= text.length(); i++) {
+            if (i < text.length() && text.charAt(i) != ' ' && text.charAt(i) != ','
+                    && text.charAt(i) != '.' && text.charAt(i) != '!'
+                    && text.charAt(i) != '?') {
                 ch.add(text.charAt(i));
             } else if(ch.size() > 0) {
                 for (Character character : ch) {
