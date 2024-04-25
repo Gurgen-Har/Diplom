@@ -12,7 +12,7 @@ public class HuffmanDynamicCoding extends HuffmanDynamic {
     public HuffmanDynamicCoding(String text) {
         super(text);
     }
-    public void coding(Node root, String str,
+    public static void coding(Node root, String str,
                         Map<String, String> huffmanCode) {
         if (root == null)
             return;

@@ -2,8 +2,7 @@ package org.example.Classic;
 
 import org.example.Node;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 public class HuffmanClassicDecode extends HuffmanClassic{
 
@@ -35,7 +34,7 @@ public class HuffmanClassicDecode extends HuffmanClassic{
 
     public String decompress() {
         StringBuilder map = new StringBuilder();
-        HashMap<String, Integer> freq = new LinkedHashMap<>();
+        HashMap<Character, Integer> freq = new LinkedHashMap<>();
         StringBuilder huffmanCodeSb = new StringBuilder();
 
 
@@ -83,14 +82,22 @@ public class HuffmanClassicDecode extends HuffmanClassic{
                         Integer.parseInt(string.substring(j * 8, j * 8 + 8), 2)
                 }, 0, 1));
             }
-            freq.put(resultString.toString(), Integer.parseInt(num, 2));
+            freq.put(resultString.charAt(0), Integer.parseInt(num, 2));
         }
+        List<Map.Entry<Character, Integer>> entries = new ArrayList<>(freq.entrySet());
+        Collections.reverse(entries);
+
+        LinkedHashMap<Character, Integer> reversedMap = new LinkedHashMap<>();
+        for (Map.Entry<Character, Integer> entry : entries) {
+            reversedMap.put(entry.getKey(), entry.getValue());
+        }
+        Node root = buildHuffmanTree(reversedMap);
 
         index = -1;
         //System.out.println("\nDecoded string is: \n");
         StringBuilder dec = new StringBuilder();
         long end = System.currentTimeMillis();
-        while (index < text.length() - 1) {
+        while (index < huffmanCodeSb.length() - 1) {
             index = decode(root, index, String.valueOf(huffmanCodeSb),dec);
         }
         return dec.toString();

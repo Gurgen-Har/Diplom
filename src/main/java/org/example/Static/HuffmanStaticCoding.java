@@ -10,8 +10,8 @@ public class HuffmanStaticCoding extends HuffmanStatic{
         StringBuilder string = new StringBuilder();
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) != ' ' && text.charAt(i) != ','
+        for (int i = 0; i <= text.length(); i++) {
+            if (i < text.length() && text.charAt(i) != ' ' && text.charAt(i) != ','
                     && text.charAt(i) != '.' && text.charAt(i) != '!'
                     && text.charAt(i) != '?') {
                 string.append(text.charAt(i));
@@ -25,7 +25,9 @@ public class HuffmanStaticCoding extends HuffmanStatic{
                     }
                     string.delete(0, string.length());
                 }
-                sb.append(huffmanCode.get(String.valueOf(text.charAt(i))));
+                if (i < text.length()) {
+                    sb.append(huffmanCode.get(String.valueOf(text.charAt(i))));
+                }
 
             }
 

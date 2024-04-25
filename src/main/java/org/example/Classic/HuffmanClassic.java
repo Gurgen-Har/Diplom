@@ -50,7 +50,7 @@ public class HuffmanClassic {
         this.root = buildHuffmanTree(freqSorted);
     }
 
-    private Node buildHuffmanTree(LinkedHashMap<Character, Integer> freqSorted) {
+    public Node buildHuffmanTree(LinkedHashMap<Character, Integer> freqSorted) {
         Node root;
         PriorityQueue<Node> pq = new PriorityQueue<>(
                 (l, r) -> l.freq - r.freq);
