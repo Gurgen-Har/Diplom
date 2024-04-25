@@ -13,30 +13,14 @@ public class HuffmanClassicCoding extends HuffmanClassic {
     public HuffmanClassicCoding(String text) {
         super(text);
     }
-    public void coding(Node root, String str,
-                              Map<Character, String> huffmanCode) {
-        if (root == null)
-            return;
 
-        // found a leaf node
-        if (root.left == null && root.right == null) {
-            huffmanCode.put(root.ch, str);
-        }
-
-
-        coding(root.left, str + "0", huffmanCode);
-        coding(root.right, str + "1", huffmanCode);
-    }
     public String compress() {
-        Map<Character, String> huffmanCode = new HashMap<>();
+        Map<String, String> huffmanCode = new HashMap<>();
         coding(root, "", huffmanCode);
         StringBuilder txt = new StringBuilder();
-        for (int i = 0; i < text.length(); i++) {
-            txt.append(String.format("%8s",Integer.toBinaryString((int)text.charAt(i))).replace(' ', '0'));
-        }
         StringBuilder sb = new StringBuilder();
         for (int i = 0 ; i < text.length(); i++) {
-            sb.append(huffmanCode.get(text.charAt(i)));
+            sb.append(huffmanCode.get(String.valueOf(text.charAt(i))));
         }
         StringBuilder table = new StringBuilder();
         for (Map.Entry<Character,Integer> entry : freq.entrySet()) {
@@ -59,7 +43,6 @@ public class HuffmanClassicCoding extends HuffmanClassic {
             table.append("0111111001111110");
             table.insert(0, "1");
         }
-        String out = table + sb.toString();
-        return out;
+        return table + sb.toString();
     }
 }

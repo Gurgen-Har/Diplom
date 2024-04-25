@@ -24,14 +24,14 @@ public class Main {
     public static void main(String[] args) throws IOException {
         String text = "This is an example of text, with, commas, and spaces This is an example with commas";
         //System.out.println(text);
-        /*HuffmanDynamicCoding huf = new HuffmanDynamicCoding(text);
+        HuffmanDynamicCoding huf = new HuffmanDynamicCoding(text);
         //System.out.println(text);
         huf.createFreq();
         String gg = huf.compress();
         HuffmanDynamicDecode hufm = new HuffmanDynamicDecode(gg);
         //System.out.println(huf.compress());
         String str = hufm.dataPreparation(gg);
-        System.out.println(str);*/
+        System.out.println(str);
         /*HuffmanClassicCoding huffmanClassic = new HuffmanClassicCoding(text);
         huffmanClassic.freqAndTree();
         String out = huffmanClassic.compress();
@@ -48,12 +48,12 @@ public class Main {
         Path outputPath = Paths.get("E:\\Dat\\dec1.txt");
         Files.writeString(outputPath, out);*/
         //System.out.println(text);
-        HuffmanStaticCoding huffmanStaticCoding = new HuffmanStaticCoding(text);
+        /*HuffmanStaticCoding huffmanStaticCoding = new HuffmanStaticCoding(text);
         huffmanStaticCoding.tree();
         String out = huffmanStaticCoding.compress();
         HuffmanStaticDecoding huffmanStaticDecoding = new HuffmanStaticDecoding(out);
         huffmanStaticDecoding.setRoot();
-        System.out.println(huffmanStaticDecoding.decompress());
+        System.out.println(huffmanStaticDecoding.decompress());*/
 
 
 

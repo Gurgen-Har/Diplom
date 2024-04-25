@@ -2,11 +2,12 @@ package org.example.Dynamic;
 
 
 
+import org.example.Huffman;
 import org.example.Node;
 
 import java.util.*;
 
-public class HuffmanDynamic {
+public class HuffmanDynamic extends Huffman {
 
     Map<String, Integer> freq;
     Node root;
@@ -77,7 +78,7 @@ public class HuffmanDynamic {
         this.root = buildHuffmanTree(freq);
     }
 
-    public static Node buildHuffmanTree(Map<String, Integer> freq) {
+    public Node buildHuffmanTree(Map<String, Integer> freq) {
         PriorityQueue<Node> pq = new PriorityQueue<>(
                 (l, r) -> l.freq - r.freq);
 

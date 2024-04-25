@@ -1,10 +1,11 @@
 package org.example.Classic;
 
+import org.example.Huffman;
 import org.example.Node;
 
 import java.util.*;
 
-public class HuffmanClassic {
+public class HuffmanClassic extends Huffman {
     Map<Character, Integer> freq;
     Node root;
 

@@ -3,6 +3,7 @@ package org.example.Static;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import org.example.Huffman;
 import org.example.Node;
 
 import java.io.FileReader;
@@ -11,7 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
-public class HuffmanStatic {
+public class HuffmanStatic extends Huffman {
     protected final String text;
     protected HashMap<String, String> huffmanCode;
     protected Node root;
