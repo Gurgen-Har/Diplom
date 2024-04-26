@@ -78,29 +78,7 @@ public class HuffmanDynamic extends Huffman {
         this.root = buildHuffmanTree(freq);
     }
 
-    public Node buildHuffmanTree(Map<String, Integer> freq) {
-        PriorityQueue<Node> pq = new PriorityQueue<>(
-                (l, r) -> l.freq - r.freq);
 
-
-        for (Map.Entry<String, Integer> entry : freq.entrySet()) {
-            pq.add(new Node(entry.getKey(), entry.getValue()));
-        }
-
-        while (pq.size() != 1)
-        {
-
-            Node left = pq.poll();
-            Node right = pq.poll();
-
-
-            int sum = left.freq + right.freq;
-            pq.add(new Node("\u0000", sum, left, right));
-        }
-
-        Node root = pq.peek();
-        return root;
-    }
 }
     /*public static void main(String[] args) {
         try {

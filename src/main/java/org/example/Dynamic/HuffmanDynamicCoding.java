@@ -1,8 +1,5 @@
 package org.example.Dynamic;
 
-import org.example.Node;
-import org.example.Static.HuffmanStaticCoding;
-
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,18 +17,15 @@ public class HuffmanDynamicCoding extends HuffmanDynamic {
         coding(root, "", huffmanCode);
 
 
-        String sb = prepare(text, huffmanCode);
+        String sb = huffmanCode(text, huffmanCode);
 
 
         StringBuilder table = new StringBuilder();
-        /*String regex = "11111111"; // Ваш символ
-        sb.append(regex);*/
         for (Map.Entry<String,Integer> entry : freq.entrySet()) {
             byte[] keys = entry.getKey().getBytes(StandardCharsets.UTF_8);
             for (byte b : keys) {
                 table.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
             }
-
 
             if (entry.getValue() < 256) {
                 table.append(String.format("%8s", Integer.toBinaryString(entry.getValue())).replace(' ', '0'));
@@ -45,8 +39,6 @@ public class HuffmanDynamicCoding extends HuffmanDynamic {
             table.append("01011100");
         }
         table.delete(table.length() - 8, table.length());
-        System.out.println(table.length());
-        System.out.println(sb.length());
         if (table.charAt(table.length() - 1) == '0') {
             table.append("1000000110000001");
             table.insert(0, "0");

@@ -17,14 +17,13 @@ public class HuffmanClassicCoding extends HuffmanClassic {
     public String compress() {
         Map<String, String> huffmanCode = new HashMap<>();
         coding(root, "", huffmanCode);
-        StringBuilder txt = new StringBuilder();
         StringBuilder sb = new StringBuilder();
         for (int i = 0 ; i < text.length(); i++) {
             sb.append(huffmanCode.get(String.valueOf(text.charAt(i))));
         }
         StringBuilder table = new StringBuilder();
-        for (Map.Entry<Character,Integer> entry : freq.entrySet()) {
-            byte[] keys = entry.getKey().toString().getBytes(StandardCharsets.UTF_8);
+        for (Map.Entry<String,Integer> entry : freq.entrySet()) {
+            byte[] keys = entry.getKey().getBytes(StandardCharsets.UTF_8);
             for (byte b : keys) {
                 table.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
             }

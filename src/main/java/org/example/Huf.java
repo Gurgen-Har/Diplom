@@ -5,7 +5,7 @@ import java.util.*;
 
 ;
 public class Huf {
-    public void coding(Node root, String str,
+    /*public void coding(Node root, String str,
                        Map<String, String> huffmanCode) {
         if (root == null)
             return;
@@ -131,7 +131,7 @@ public class Huf {
 
         }
 
-        /*int index = -1;
+        *//*int index = -1;
         StringBuilder dec = new StringBuilder();
 
         while (index < sb.length() - 1) {
@@ -139,7 +139,7 @@ public class Huf {
         }
         System.out.println(dec);
 
-        System.out.println(freqCombination);*/
+        System.out.println(freqCombination);*//*
         StringBuilder table = new StringBuilder();
         String regex = "11111111"; // Ваш символ
         sb.append(regex);
@@ -258,5 +258,5 @@ public class Huf {
 
         Node root = pq.peek();
         return root;
-    }
+    }*/
 }

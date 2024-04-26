@@ -14,7 +14,7 @@ public class HuffmanClassicDecode extends HuffmanClassic{
 
     public String decompress() {
         StringBuilder map = new StringBuilder();
-        HashMap<Character, Integer> freq = new LinkedHashMap<>();
+        HashMap<String, Integer> freq = new LinkedHashMap<>();
         StringBuilder huffmanCodeSb = new StringBuilder();
 
 
@@ -62,13 +62,13 @@ public class HuffmanClassicDecode extends HuffmanClassic{
                         Integer.parseInt(string.substring(j * 8, j * 8 + 8), 2)
                 }, 0, 1));
             }
-            freq.put(resultString.charAt(0), Integer.parseInt(num, 2));
+            freq.put(String.valueOf(resultString.charAt(0)), Integer.parseInt(num, 2));
         }
-        List<Map.Entry<Character, Integer>> entries = new ArrayList<>(freq.entrySet());
+        List<Map.Entry<String, Integer>> entries = new ArrayList<>(freq.entrySet());
         Collections.reverse(entries);
 
-        LinkedHashMap<Character, Integer> reversedMap = new LinkedHashMap<>();
-        for (Map.Entry<Character, Integer> entry : entries) {
+        LinkedHashMap<String, Integer> reversedMap = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : entries) {
             reversedMap.put(entry.getKey(), entry.getValue());
         }
         Node root = buildHuffmanTree(reversedMap);

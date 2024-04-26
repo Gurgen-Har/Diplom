@@ -1,7 +1,5 @@
 package org.example.Static;
 
-import java.util.Map;
-
 public class HuffmanStaticCoding extends HuffmanStatic{
 
     public HuffmanStaticCoding(String text) {
@@ -10,7 +8,7 @@ public class HuffmanStaticCoding extends HuffmanStatic{
 
     public String compress() {
 
-        String sb = prepare(text, huffmanCode);;
+        String sb = huffmanCode(text, huffmanCode);;
 
         return sb;
     }

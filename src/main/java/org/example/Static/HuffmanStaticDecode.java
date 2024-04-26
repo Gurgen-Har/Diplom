@@ -1,9 +1,7 @@
 package org.example.Static;
 
-import org.example.Node;
-
-public class HuffmanStaticDecoding extends HuffmanStatic{
-    public HuffmanStaticDecoding(String text) {
+public class HuffmanStaticDecode extends HuffmanStatic{
+    public HuffmanStaticDecode(String text) {
         super(text);
 
     }

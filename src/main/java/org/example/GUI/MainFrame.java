@@ -1,13 +1,11 @@
 package org.example.GUI;
 import org.apache.commons.io.FilenameUtils;
-import org.example.Classic.HuffmanClassic;
 import org.example.Classic.HuffmanClassicCoding;
 import org.example.Classic.HuffmanClassicDecode;
 import org.example.Dynamic.HuffmanDynamicCoding;
 import org.example.Dynamic.HuffmanDynamicDecode;
-import org.example.Static.HuffmanStatic;
 import org.example.Static.HuffmanStaticCoding;
-import org.example.Static.HuffmanStaticDecoding;
+import org.example.Static.HuffmanStaticDecode;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -217,7 +215,7 @@ public class MainFrame extends JFrame {
 
     private class HuffmanStaticPanel extends JPanel {
         private HuffmanStaticCoding encoder;
-        private HuffmanStaticDecoding decoder;
+        private HuffmanStaticDecode decoder;
         private final SouthPanel southPanel = new SouthPanel();
 
         public HuffmanStaticPanel() {
@@ -302,7 +300,7 @@ public class MainFrame extends JFrame {
                             ex.printStackTrace();
                         }
                         encoder = new HuffmanClassicCoding(text);
-                        encoder.freqAndTree();
+                        encoder.createFreq();
                         String output = encoder.compress();
                         Path outputPath = Paths.get(inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + ".hs");
                         try {
