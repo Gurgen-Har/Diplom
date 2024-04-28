@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 public abstract class Huffman {
-    public void coding(Node root, String str,
+    public static void coding(Node root, String str,
                               Map<String, String> huffmanMap) {
         if (root == null)
             return;
@@ -69,7 +69,7 @@ public abstract class Huffman {
         return sb.toString();
     }
 
-    public Node buildHuffmanTree(Map<String, Integer> freq) {
+    public static Node buildHuffmanTree(Map<String, Integer> freq) {
         PriorityQueue<Node> pq = new PriorityQueue<>(
                 (l, r) -> l.freq - r.freq);
 

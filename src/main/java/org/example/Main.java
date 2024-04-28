@@ -1,9 +1,13 @@
 package org.example;
 
-import org.example.Classic.HuffmanClassicCoding;
-import org.example.Classic.HuffmanClassicDecode;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -17,13 +21,13 @@ public class Main {
         //System.out.println(huf.compress());
         String str = hufm.dataPreparation(gg);
         System.out.println(str);*/
-        HuffmanClassicCoding huffmanClassic = new HuffmanClassicCoding(text);
+        /*HuffmanClassicCoding huffmanClassic = new HuffmanClassicCoding(text);
         huffmanClassic.createFreq();
         String out = huffmanClassic.compress();
         System.out.println(out);
         HuffmanClassicDecode huffmanClassicDecode = new HuffmanClassicDecode(out);
 
-        System.out.println(huffmanClassicDecode.decompress());
+        System.out.println(huffmanClassicDecode.decompress());*/
 
         /*Path inputPath = Paths.get("E:\\Dat\\dec.txt");
         String tex = Files.readString(inputPath, StandardCharsets.UTF_8);
@@ -42,7 +46,7 @@ public class Main {
 
 
 
-        /*String json = "";
+        String json = "";
         try {
             json = new String(Files.readAllBytes(Paths.get("Data.json")));
         } catch (IOException e) {
@@ -58,9 +62,9 @@ public class Main {
 
         // Преобразование JSON в HashMap
         HashMap<String, Integer> hashMap = gson.fromJson(json, type);
-        Node root = HuffmanDynamicCoding.buildHuffmanTree(hashMap);
+        Node root = Huffman.buildHuffmanTree(hashMap);
         HashMap<String, String> str = new HashMap<>();
-        HuffmanDynamicCoding.coding(root,"",str);
+        Huffman.coding(root,"",str);
         Gson gsson = new Gson();
 
         // Преобразование HashMap в JSON строку
@@ -86,7 +90,7 @@ public class Main {
             writer.write(jssson);
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
 
 
     }

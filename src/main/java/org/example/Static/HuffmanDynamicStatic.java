@@ -12,16 +12,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
-public class HuffmanStatic extends Huffman {
+public class HuffmanDynamicStatic extends Huffman {
     protected final String text;
-    protected HashMap<String, String> huffmanCode;
+    protected HashMap<String, String> huffmanMap;
     protected Node root;
-    public HuffmanStatic(String text) {
+    public HuffmanDynamicStatic(String text) {
         this.text = text;
 
     }
 
-    public void tree() {
+    public void getHuffmanMap() {
         String json = "";
         try {
             json = new String(Files.readAllBytes(Paths.get("TreeStatic.json")));
@@ -37,10 +37,10 @@ public class HuffmanStatic extends Huffman {
         java.lang.reflect.Type type = new TypeToken<HashMap<String, String>>(){}.getType();
 
         // Преобразование JSON в HashMap
-        this.huffmanCode = gson.fromJson(json, type);
+        this.huffmanMap = gson.fromJson(json, type);
 
     }
-    public void setRoot() {
+    public void getTree() {
         String filePath = "Node.json";
 
         try {
@@ -55,5 +55,25 @@ public class HuffmanStatic extends Huffman {
         } catch (JsonSyntaxException | IOException e) {
             e.printStackTrace();
         }
+    }
+    public String decompress() {
+
+
+        int index = -1;
+        StringBuilder dec = new StringBuilder();
+
+        while (index < text.length() - 1) {
+            index = decode(root, index, text,dec);
+        }
+
+
+        return dec.toString();
+    }
+
+    public String compress() {
+
+        String sb = huffmanCode(text, huffmanMap);;
+
+        return sb;
     }
 }
