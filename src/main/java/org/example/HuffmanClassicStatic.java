@@ -3,7 +3,6 @@ package org.example;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import org.example.Classic.HuffmanClassic;
 
 import java.io.FileReader;
 import java.io.IOException;

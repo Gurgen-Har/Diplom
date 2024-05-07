@@ -3,8 +3,10 @@ package org.example;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -46,7 +48,7 @@ public class Main {
 
 
 
-        String json = "";
+        /*String json = "";
         try {
             json = new String(Files.readAllBytes(Paths.get("Data.json")));
         } catch (IOException e) {
@@ -90,6 +92,21 @@ public class Main {
             writer.write(jssson);
         } catch (IOException e) {
             e.printStackTrace();
+        }*/
+
+        try {
+            // Создаем поток вывода в файл
+            OutputStream outputStream = new FileOutputStream("output.txt");
+
+            // Записываем байт, который представляет вашу последовательность 01010101
+            outputStream.write(0b010101001); // Префикс 0b указывает на двоичное число в Java
+
+            // Закрываем поток
+            outputStream.close();
+
+            System.out.println("Данные успешно записаны в файл.");
+        } catch (IOException e) {
+            System.out.println("Ошибка при записи в файл: " + e.getMessage());
         }
 
 

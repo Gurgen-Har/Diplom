@@ -8,8 +8,8 @@ import java.io.OutputStream;
  * Изменяемый, но не потокобезопасный.
  */
 public class BitWriter {
-    private OutputStream outputStream;
-    private WriteBuffer buffer = new WriteBuffer();
+    private final OutputStream outputStream;
+    private final WriteBuffer buffer = new WriteBuffer();
 
     // Конструктор для инициализации BitWriter с указанным потоком вывода.
     public BitWriter(OutputStream outputStream) {

@@ -16,7 +16,7 @@ public class BitReader {
     }
 
     // Читает один бит из потока ввода.
-    public int readBit() throws IOException {
+    public int readBit(int i) throws IOException {
         if (buffer.isEmpty()) {
             int readByte = inputStream.read();
             if (readByte == -1) {
@@ -24,14 +24,18 @@ public class BitReader {
             }
             buffer.refill((byte) readByte);
         }
-        return buffer.nextBit();
+        if (i == 1) {
+            return buffer.nextBit(1);
+        } else {
+            return buffer.nextBit(0);
+        }
     }
 
     // Читает определенное количество битов (до 64) из потока ввода и возвращает значение.
     public long readNBitValue(int n) throws IOException {
         long nBitValue = 0;
         for (int i = 0; i < n; i++) {
-            nBitValue |= (readBit() << i);
+            nBitValue |= (readBit(0) << i);
         }
         return nBitValue;
     }

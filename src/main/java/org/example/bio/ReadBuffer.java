@@ -25,7 +25,12 @@ public class ReadBuffer {
     }
 
     // Читает следующий бит из буфера.
-    public int nextBit() {
-        return bits >> pos++ & 1;
+    public int nextBit(int i) {
+        if (i == 1) {
+            boolean isSet = (bits & (1 << (pos++))) != 0;
+            return isSet ? 1 : 0;
+        } else {
+            return bits >> pos++ & 1;
+        }
     }
 }

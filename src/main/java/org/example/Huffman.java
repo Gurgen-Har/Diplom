@@ -1,9 +1,17 @@
 package org.example;
 
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public abstract class Huffman {
+    protected CounterLength[] counterCodes;
+
+    protected Map<String, String> dictionary;
+    protected int[] histogram;
+    protected Node root;
+
+    public Huffman() {
+        dictionary = new HashMap<>();
+    }
     public static void coding(Node root, String str,
                               Map<String, String> huffmanMap) {
         if (root == null)
@@ -71,7 +79,7 @@ public abstract class Huffman {
 
     public static Node buildHuffmanTree(Map<String, Integer> freq) {
         PriorityQueue<Node> pq = new PriorityQueue<>(
-                (l, r) -> l.freq - r.freq);
+                Comparator.comparingInt(l -> l.freq));
 
 
         for (Map.Entry<String, Integer> entry : freq.entrySet()) {
@@ -91,5 +99,32 @@ public abstract class Huffman {
 
         Node root = pq.peek();
         return root;
+    }
+    public void computeDictionary() {
+        Map<String, Integer> freq = new LinkedHashMap<>();
+        for (int i = 0; i < 256; i++) {
+            if (histogram[i] != 0)
+                freq.put(String.valueOf(i), histogram[i]);
+        }
+
+        root = buildHuffmanTree(freq);
+        coding(root, "", dictionary);
+    }
+
+    public enum CounterLength {
+        NU_SE_REPREZINTA(0),
+        SE_REPREZINTA_PE_1_OCTET(1),
+        SE_REPREZINTA_PE_2_OCTETI(2),
+        SE_REPREZINTA_PE_4_OCTETI(4);
+
+        private int nrBytes;
+
+        CounterLength(int nrBytes) {
+            this.nrBytes = nrBytes;
+        }
+
+        public int getNrBytes() {
+            return nrBytes;
+        }
     }
 }
