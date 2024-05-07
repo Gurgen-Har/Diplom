@@ -6,7 +6,7 @@ import org.example.Classic.HuffmanClassicEncode;
 
 import org.example.HuffmanClassicStatic;
 import org.example.Static.HuffmanDynamicStatic;
-import org.example.Dynamic.HuffmanDynamic;
+import org.example.Dynamic.HuffmanDynamicEncode;
 import org.example.bio.BitReader;
 import org.example.bio.BitWriter;
 
@@ -159,8 +159,8 @@ public class MainFrame extends JFrame {
 
 
     private class HuffmanDynamicPanel extends JPanel {
-        private HuffmanDynamic encoder;
-        private HuffmanDynamic decoder;
+        private HuffmanDynamicEncode encoder;
+        private HuffmanDynamicEncode decoder;
         private final SouthPanel southPanel = new SouthPanel();
 
         public HuffmanDynamicPanel() {
@@ -183,7 +183,7 @@ public class MainFrame extends JFrame {
                             // Теперь у вас есть строка fileContent, содержащая содержимое выбранного файла
                             // Вы можете сделать что-то с этой строкой здесь
                             long time0 = System.currentTimeMillis();
-                            encoder = new HuffmanDynamic(text);
+                            encoder = new HuffmanDynamicEncode(text);
                             encoder.createFreq();
                             String output = encoder.compress();
                             long timePassed = System.currentTimeMillis() - time0;
@@ -216,7 +216,7 @@ public class MainFrame extends JFrame {
                             ex.printStackTrace();
                         }
                         long time0 = System.currentTimeMillis();
-                        decoder = new HuffmanDynamic(text);
+                        decoder = new HuffmanDynamicEncode(text);
                         String output = decoder.decompress(text);
                         long timePassed = System.currentTimeMillis() - time0;
                         statusBar.leftStatus.setText("Decoded in " + (timePassed / 1000.0) + " seconds.");

@@ -60,7 +60,7 @@ public class HuffmanClassicEncode extends Huffman {
         while (readByte != -1) {
             String val = dictionary.get(String.valueOf(readByte));
 
-            bitWriter.writeNBitValue(Integer.parseInt(mirror(val)), val.length());
+            bitWriter.writeNBitValue(Integer.parseInt(mirror(val), 2), val.length());
             readByte = inputStream.read();
         }
     }

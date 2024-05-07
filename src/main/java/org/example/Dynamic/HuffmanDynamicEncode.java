@@ -4,17 +4,124 @@ package org.example.Dynamic;
 
 import org.example.Huffman;
 import org.example.Node;
+import org.example.bio.BitWriter;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class HuffmanDynamic extends Huffman {
+public class HuffmanDynamicEncode extends Huffman {
 
-    Map<String, Integer> freq;
+    private final BitWriter bitWriter;
+    Map<List<Integer>, Integer> histogramWord;
+
+
+    public HuffmanDynamicEncode(BitWriter bitWriter) {
+        super();
+        this.bitWriter = bitWriter;
+        histogramWord = new LinkedHashMap<>();
+
+    }
+
+    public void computeSymbolHistogram(InputStream inputStream) throws IOException {
+        histogram = new int[256];
+        int byteIn = inputStream.read();
+        while (byteIn != -1) {
+            histogram[byteIn]++;
+            byteIn = inputStream.read();
+        }
+    }
+
+    public void computeWordHistogram(InputStream inputStream) throws IOException {
+
+
+        List<Integer> histogram = new LinkedList<>();
+        int byteIn = inputStream.read();
+        while (byteIn != -1) {
+            while ( (97 <= byteIn && byteIn <= 122) || (65 <= byteIn && byteIn <= 90) ) {
+                histogram.add(byteIn);
+                byteIn = inputStream.read();
+            }
+            if (histogram.size() > 1) {
+                if (histogramWord.containsKey(histogram)) {
+                    histogramWord.put(histogram,histogramWord.get(histogram) + 1);
+                } else {
+                    histogramWord.put(histogram,1);
+                }
+                histogram.clear();
+
+            } else if (histogram.size() == 0){
+                byteIn = inputStream.read();
+            } else {
+                histogram.clear();
+            }
+
+        }
+        histogramWord.entrySet().removeIf(entry -> entry.getValue() <= 15);// установить значение
+
+        // Написать выписыватель символов из histogramSymbol
+    }
+    public void computeCounterLengths() {
+        if (histogram == null) {
+            throw new RuntimeException("Histogram not initialized");
+        }
+        counterCodes = new CounterLength[256];
+        for (int i = 0; i < histogram.length; i++) {
+            counterCodes[i] =
+                    histogram[i] > 0 ?
+                            histogram[i] < 256 ? CounterLength.SE_REPREZINTA_PE_1_OCTET
+                                    : histogram[i] < 65536 ? CounterLength.SE_REPREZINTA_PE_2_OCTETI
+                                    : CounterLength.SE_REPREZINTA_PE_4_OCTETI
+                            : CounterLength.NU_SE_REPREZINTA;
+        }
+        // Написать countercodes для слов
+    }
+
+    public void writeHeader(BitWriter bitWriter) throws IOException {
+        if (counterCodes == null) {
+            throw new RuntimeException("Counter sizes not computed");
+        }
+        for (int i = 0; i < 256; i++) {
+            bitWriter.writeNBitValue(counterCodes[i].ordinal(), 2);
+        }
+        for (int i = 0; i < 256; i++) {
+            if (counterCodes[i] != CounterLength.NU_SE_REPREZINTA) {
+                bitWriter.writeNBitValue(histogram[i], counterCodes[i].getNrBytes() * 8);
+            }
+        }
+        // при записи в начало в 8 бит вписать количество слов закодированных
+    }
+
+    public void encodeAndWrite(InputStream inputStream) throws IOException {
+        int readByte = inputStream.read();
+        while (readByte != -1) {
+            String val = dictionary.get(String.valueOf(readByte));
+
+            bitWriter.writeNBitValue(Integer.parseInt(mirror(val), 2), val.length());
+            readByte = inputStream.read();
+        }
+    }
+
+    public String mirror(String original) {
+        StringBuilder mirrored = new StringBuilder();
+
+        for (int i = original.length() - 1; i >= 0; i--) {
+            mirrored.append(original.charAt(i));
+        }
+
+        return mirrored.toString();
+    }
+
+    public void flush() throws IOException {
+        bitWriter.flush();
+    }
+
+    /*Map<String, Integer> freq;
     Node root;
 
     String text;
-    public HuffmanDynamic(String text) {
+    public HuffmanDynamicEncode(String text) {
         this.freq = new HashMap<>();
         this.text = text;
     }
@@ -195,5 +302,5 @@ public class HuffmanDynamic extends Huffman {
 
 
         return dec.toString();
-    }
+    }*/
 }
