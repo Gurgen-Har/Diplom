@@ -5,15 +5,19 @@ import java.util.*;
 public abstract class Huffman {
     protected CounterLength[] counterCodes;
 
-    protected Map<String, String> dictionary;
+    protected Map<String, String> dictionaryClassic;
+    protected Map<List<Integer>, String> dictionaryDynamic;
     protected int[] histogram;
+
+    protected Map<List<Integer>, Integer> frequency;
     protected Node root;
 
     public Huffman() {
-        dictionary = new HashMap<>();
+        dictionaryClassic = new HashMap<>();
+        dictionaryDynamic = new HashMap<>();
     }
-    public static void coding(Node root, String str,
-                              Map<String, String> huffmanMap) {
+    public static void codingClassic(Node root, String str,
+                                     Map<String, String> huffmanMap) {
         if (root == null)
             return;
 
@@ -23,8 +27,23 @@ public abstract class Huffman {
         }
 
 
-        coding(root.left, str + "0", huffmanMap);
-        coding(root.right, str + "1", huffmanMap);
+        codingClassic(root.left, str + "0", huffmanMap);
+        codingClassic(root.right, str + "1", huffmanMap);
+    }
+
+    public static void codingDynamic(Node root, String str,
+                              Map<List<Integer>, String> huffmanMap) {
+        if (root == null)
+            return;
+
+        // found a leaf node
+        if (root.left == null && root.right == null) {
+            huffmanMap.put(root.list, str);
+        }
+
+
+        codingDynamic(root.left, str + "0", huffmanMap);
+        codingDynamic(root.right, str + "1", huffmanMap);
     }
     public int decode(Node root, int index, String sb, StringBuilder dec) {
         if (root == null)
@@ -77,7 +96,7 @@ public abstract class Huffman {
         return sb.toString();
     }
 
-    public static Node buildHuffmanTree(Map<String, Integer> freq) {
+    public static Node buildClassicTree(Map<String, Integer> freq) {
         PriorityQueue<Node> pq = new PriorityQueue<>(
                 Comparator.comparingInt(l -> l.freq));
 
@@ -100,16 +119,51 @@ public abstract class Huffman {
         Node root = pq.peek();
         return root;
     }
-    public void computeDictionary() {
+
+    public static Node buildDynamicTree(Map<List<Integer>, Integer> freq) {
+        PriorityQueue<Node> pq = new PriorityQueue<>(
+                Comparator.comparingInt(l -> l.freq));
+
+
+        for (Map.Entry<List<Integer>, Integer> entry : freq.entrySet()) {
+            pq.add(new Node(entry.getKey(), entry.getValue()));
+        }
+
+        List<Integer> list = null;
+        while (pq.size() != 1)
+        {
+
+            Node left = pq.poll();
+            Node right = pq.poll();
+
+
+            int sum = left.freq + right.freq;
+            pq.add(new Node(list, sum, left, right));
+        }
+
+        Node root = pq.peek();
+        return root;
+    }
+
+    public void computeClassicDictionary() {
         Map<String, Integer> freq = new LinkedHashMap<>();
         for (int i = 0; i < 256; i++) {
             if (histogram[i] != 0)
                 freq.put(String.valueOf(i), histogram[i]);
         }
 
-        root = buildHuffmanTree(freq);
-        coding(root, "", dictionary);
+        root = buildClassicTree(freq);
+        codingClassic(root, "", dictionaryClassic);
     }
+
+    public void computeDynamicDictionary() {
+        Map<List<Integer>, Integer> freq = new HashMap<>();
+        freq.putAll(frequency);
+
+        root = buildDynamicTree(freq);
+        codingDynamic(root, "", dictionaryDynamic);
+    }
+
 
     public enum CounterLength {
         NU_SE_REPREZINTA(0),

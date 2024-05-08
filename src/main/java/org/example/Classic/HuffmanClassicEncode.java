@@ -58,14 +58,14 @@ public class HuffmanClassicEncode extends Huffman {
     public void encodeAndWrite(InputStream inputStream) throws IOException {
         int readByte = inputStream.read();
         while (readByte != -1) {
-            String val = dictionary.get(String.valueOf(readByte));
+            String val = dictionaryClassic.get(String.valueOf(readByte));
 
             bitWriter.writeNBitValue(Integer.parseInt(mirror(val), 2), val.length());
             readByte = inputStream.read();
         }
     }
 
-    public String mirror(String original) {
+    public static String mirror(String original) {
         StringBuilder mirrored = new StringBuilder();
 
         for (int i = original.length() - 1; i >= 0; i--) {

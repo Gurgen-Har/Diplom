@@ -4,6 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.example.Classic.HuffmanClassicDecode;
 import org.example.Classic.HuffmanClassicEncode;
 
+import org.example.Dynamic.HuffmanDynamicDecode;
 import org.example.HuffmanClassicStatic;
 import org.example.Static.HuffmanDynamicStatic;
 import org.example.Dynamic.HuffmanDynamicEncode;
@@ -160,7 +161,7 @@ public class MainFrame extends JFrame {
 
     private class HuffmanDynamicPanel extends JPanel {
         private HuffmanDynamicEncode encoder;
-        private HuffmanDynamicEncode decoder;
+        private HuffmanDynamicDecode decoder;
         private final SouthPanel southPanel = new SouthPanel();
 
         public HuffmanDynamicPanel() {
@@ -177,28 +178,41 @@ public class MainFrame extends JFrame {
                 huffmanEncodeButton.addActionListener(e -> {
                     statusBar.leftStatus.setText("Encoding. Please wait...");
                     EventQueue.invokeLater(new Thread(() -> {
-                        String text = "";
+                        File outputFile = new File(FilenameUtils
+                                .removeExtension(inputFile.getAbsolutePath()) + ".hs");
+                        OutputStream outputStream = null;
+                        InputStream inputStream = null;
                         try {
-                            text = Files.readString(inputPath, StandardCharsets.UTF_16);
-                            // Теперь у вас есть строка fileContent, содержащая содержимое выбранного файла
-                            // Вы можете сделать что-то с этой строкой здесь
+                            outputFile.createNewFile();
+                            outputStream = new FileOutputStream(outputFile);
+                            inputStream = new BufferedInputStream(new FileInputStream(inputFile));
+                            bitWriter = new BitWriter(new BufferedOutputStream(outputStream));
+                            encoder = new HuffmanDynamicEncode(bitWriter);
                             long time0 = System.currentTimeMillis();
-                            encoder = new HuffmanDynamicEncode(text);
-                            encoder.createFreq();
-                            String output = encoder.compress();
+                            encoder.computeSymbolHistogram(inputStream);
+                            inputStream = new BufferedInputStream(new FileInputStream(inputFile));
+                            encoder.computeWordHistogram(inputStream);
+                            encoder.computeCounterLengths();
+                            encoder.computeDynamicDictionary();
+                            encoder.writeHeader(bitWriter);
+                            inputStream = new BufferedInputStream(new FileInputStream(inputFile));
+                            encoder.encodeAndWrite(inputStream);
+                            encoder.flush();
                             long timePassed = System.currentTimeMillis() - time0;
                             statusBar.leftStatus.setText("Encoded in " + (timePassed / 1000.0) + " seconds.");
-                            Path outputPath = Paths.get("E:\\Dat\\"+inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + ".hs");
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        } finally {
                             try {
-                                Files.writeString(outputPath, output); // Запись содержимого в файл
-                                System.out.println("Содержимое успешно записано в файл -Dynamic " + outputPath);
-                            } catch (IOException ex) {
-                                // Обработка ошибок записи файла
-                                ex.printStackTrace();
+                                outputStream.close();
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
                             }
-                        } catch (IOException ex) {
-                            // Обработка ошибок чтения файла
-                            ex.printStackTrace();
+                            try {
+                                inputStream.close();
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
                         }
 
 
@@ -208,25 +222,39 @@ public class MainFrame extends JFrame {
                 huffmanDecodeButton.addActionListener(e -> {
                     statusBar.leftStatus.setText("Decoding. Please wait...");
                     EventQueue.invokeLater(new Thread(() -> {
-                        String text = "";
+                        File outputFile = new File(FilenameUtils.removeExtension(inputFile.getAbsolutePath()) + ".hsd");
+                        OutputStream outputStream = null;
+                        InputStream inputStream = null;
                         try {
-                            text = Files.readString(inputPath, StandardCharsets.UTF_8);
-
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
-                        long time0 = System.currentTimeMillis();
-                        decoder = new HuffmanDynamicEncode(text);
-                        String output = decoder.decompress(text);
-                        long timePassed = System.currentTimeMillis() - time0;
-                        statusBar.leftStatus.setText("Decoded in " + (timePassed / 1000.0) + " seconds.");
-                        Path outputPath = Paths.get("E:\\Dat\\"+inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + "hsDyn.txt");
-                        try {
-                            Files.writeString(outputPath, output); // Запись содержимого в файл
-                            System.out.println("Содержимое успешно записано в файл " + outputPath);
-                        } catch (IOException ex) {
-                            // Обработка ошибок записи файла
-                            ex.printStackTrace();
+                            outputFile.createNewFile();
+                            outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
+                            inputStream = new BufferedInputStream(new FileInputStream(inputFile));
+                            bitReader = new BitReader(inputStream);
+                            decoder = new HuffmanDynamicDecode(bitReader);
+                            long time0 = System.currentTimeMillis();
+                            decoder.readSymbolCounterSizes(bitReader);
+                            decoder.readSymbolHistogram(bitReader);
+                            decoder.readWordCounterSizes(bitReader);
+                            decoder.readWordHistogram(bitReader);
+                            decoder.computeDynamicDictionary();
+                            decoder.decodeAndWrite(outputStream);
+                            long timePassed = System.currentTimeMillis() - time0;
+                            statusBar.leftStatus.setText("Decoded in " + (timePassed / 1000.0) + " seconds.");
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        } finally {
+                            try {
+                                assert outputStream != null;
+                                outputStream.close();
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
+                            try {
+                                assert inputStream != null;
+                                inputStream.close();
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
                         }
                     }));
                 });
@@ -354,7 +382,7 @@ public class MainFrame extends JFrame {
                             long time0 = System.currentTimeMillis();
                             encoder.computeHistogram(inputStream);
                             encoder.computeCounterLengths();
-                            encoder.computeDictionary();
+                            encoder.computeClassicDictionary();
                             encoder.writeHeader(bitWriter);
                             inputStream = new BufferedInputStream(new FileInputStream(inputFile));
                             encoder.encodeAndWrite(inputStream);
@@ -382,7 +410,7 @@ public class MainFrame extends JFrame {
                 huffmanDecodeButton.addActionListener(e -> {
                     statusBar.leftStatus.setText("Decoding. Please wait...");
                     EventQueue.invokeLater(new Thread(() -> {
-                        File outputFile = new File(FilenameUtils.removeExtension(inputFile.getAbsolutePath()) + ".hsd");
+                        File outputFile = new File(FilenameUtils.removeExtension(inputFile.getAbsolutePath()) + ".hsd3");
                         OutputStream outputStream = null;
                         InputStream inputStream = null;
                         try {
@@ -394,7 +422,7 @@ public class MainFrame extends JFrame {
                             long time0 = System.currentTimeMillis();
                             decoder.readCounterSizes(bitReader);
                             decoder.readHistogram(bitReader);
-                            decoder.computeDictionary();
+                            decoder.computeClassicDictionary();
                             decoder.decodeAndWrite(outputStream);
                             long timePassed = System.currentTimeMillis() - time0;
                             statusBar.leftStatus.setText("Decoded in " + (timePassed / 1000.0) + " seconds.");

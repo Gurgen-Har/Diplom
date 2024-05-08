@@ -39,4 +39,5 @@ public class BitReader {
         }
         return nBitValue;
     }
+    public int readByte() throws IOException {return inputStream.read();}
 }
