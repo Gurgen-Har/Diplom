@@ -163,19 +163,19 @@ public class HuffmanDynamicEncode extends Huffman {
                 readByte = inputStream.read();
             }
             if (dictionaryDynamic.containsKey(list)) {
-                bitWriter.writeNBitValue(Integer.parseInt(HuffmanClassicEncode.mirror(dictionaryDynamic.get(list)),2), dictionaryDynamic.get(list).length());
+                bitWriter.writeNBitValue(Integer.parseInt(mirror(dictionaryDynamic.get(list)),2), dictionaryDynamic.get(list).length());
             } else {
                 for (Integer integer : list) {
                     List<Integer> list1 = new ArrayList<>();
                     list1.add(integer);
-                    bitWriter.writeNBitValue(Integer.parseInt( HuffmanClassicEncode.mirror(dictionaryDynamic.get(list1)),2), dictionaryDynamic.get(list1).length());
+                    bitWriter.writeNBitValue(Integer.parseInt( mirror(dictionaryDynamic.get(list1)),2), dictionaryDynamic.get(list1).length());
                 }
             }
 
             List<Integer> list1 = new ArrayList<>();
             list1.add(readByte);
             if (readByte != -1) {
-                bitWriter.writeNBitValue(Integer.parseInt(HuffmanClassicEncode.mirror(dictionaryDynamic.get(list1)), 2), dictionaryDynamic.get(list1).length());
+                bitWriter.writeNBitValue(Integer.parseInt(mirror(dictionaryDynamic.get(list1)), 2), dictionaryDynamic.get(list1).length());
                 readByte = inputStream.read();
             } else {
                 break;

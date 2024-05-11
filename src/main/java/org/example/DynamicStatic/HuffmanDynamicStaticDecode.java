@@ -1,8 +1,7 @@
-package org.example.ClassicStatic;
+package org.example.DynamicStatic;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import org.example.Huffman;
 import org.example.Node;
 import org.example.bio.BitReader;
@@ -10,21 +9,15 @@ import org.example.bio.BitReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
-public class HuffmanClassicStaticDecode extends Huffman {
-    //int [] histogram;
-    private final BitReader bitReader;
-    public HuffmanClassicStaticDecode(BitReader bitReader) {
+public class HuffmanDynamicStaticDecode extends Huffman {
+    private BitReader bitReader;
+    public HuffmanDynamicStaticDecode(BitReader bitReader) {
         super();
         this.bitReader = bitReader;
-
     }
     public void getTree() {
-        String filePath = "Node3.json";
+        String filePath = "Node4.json";
 
         try {
             // Создаем экземпляр Gson
@@ -38,45 +31,27 @@ public class HuffmanClassicStaticDecode extends Huffman {
         } catch (JsonSyntaxException | IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void getDictionary() {
-        String json = "";
-        try {
-            json = new String(Files.readAllBytes(Paths.get("TreeStatic3.json")));
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-
-        // Создание объекта Gson
-        Gson gson = new Gson();
-
-        // Получение типа для десериализации
-        java.lang.reflect.Type type = new TypeToken<HashMap<String, String>>() {
-        }.getType();
-
-        // Преобразование JSON в HashMap
 
     }
 
     public void decodeAndWrite(OutputStream outputStream) throws IOException {
-        //int totalByteCount = getTotalByteCount();
-        Node root = this.root;
 
+        Node root = this.root;
         int bit = 0;
         while (true){
-
             do {
-                bit = bitReader.readBit(1);
+                bit = bitReader.readBit(0);
 
                 if (bit == 0)
                     root = root.left;
-                else if (bit == 1)
+                else
                     root = root.right;
             }while (((root.left != null) && (root.right != null)) && bit != -1);
             if (bit == -1) break;
-            outputStream.write(Integer.parseInt(root.str));
+            for (int j = 0 ; j < root.list.size(); j++) {
+                int integer = root.list.get(j);
+                outputStream.write(integer);
+            }
             root = this.root;
         }
     }

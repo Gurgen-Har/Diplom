@@ -53,7 +53,7 @@ public class HuffmanClassicDecode extends Huffman {
 
         for (int i = 0; i < totalByteCount; i++) {
             do {
-                int bit = bitReader.readBit(1);
+                int bit = bitReader.readBit(0);
 
                 if (bit == 0)
                     root = root.left;

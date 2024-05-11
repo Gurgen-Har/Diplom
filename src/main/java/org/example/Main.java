@@ -9,21 +9,18 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
-import static org.example.Huffman.buildClassicTree;
-import static org.example.Huffman.codingClassic;
+import static org.example.Huffman.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         String text = "This is an example of text, with, commas, and spaces This is an example with commas ";
         //System.out.println(text);
 
-       /* String json = "";
+        String json = "";
         try {
-            json = new String(Files.readAllBytes(Paths.get("Data2.json")));
+            json = new String(Files.readAllBytes(Paths.get("Data.json")));
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -36,26 +33,32 @@ public class Main {
         java.lang.reflect.Type type = new TypeToken<HashMap<String, Integer>>(){}.getType();
 
         // Преобразование JSON в HashMap
+        Map<List<Integer>, Integer> freq = new LinkedHashMap<>();
         HashMap<String, Integer> hashMap = gson.fromJson(json, type);
-        int[] histogram = new int[256];
-
+        //int[] histogram = new int[256];
         for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
-            int num = (int) entry.getKey().charAt(0);
-            histogram[num] = entry.getValue();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < entry.getKey().length(); i++) {
+                int num = (int)entry.getKey().charAt(i);
+                list.add(num);
+            }
+            freq.put(list, entry.getValue());
+
+            //histogram[num] = entry.getValue();
         }
 
 
 
 
-        Map<String, Integer> freq = new LinkedHashMap<>();
-        for (int i = 0; i < 256; i++) {
+
+        /*for (int i = 0; i < 256; i++) {
             if (histogram[i] != 0)
                 freq.put(String.valueOf(i), histogram[i]);
-        }
+        }*/
 
-        Node root = buildClassicTree(freq);
-        Map<String, String> dictionaryClassic = new LinkedHashMap<>();
-        codingClassic(root, "", dictionaryClassic);
+        Node root = buildDynamicTree(freq);
+        Map<List<Integer>, String> dictionaryDynamic = new HashMap<>();
+        codingDynamic(root, "", dictionaryDynamic);
 
 
 
@@ -63,14 +66,15 @@ public class Main {
         Gson gsson = new Gson();
 
         // Преобразование HashMap в JSON строку
-        String jsson = gsson.toJson(dictionaryClassic);
+        String jsson = gsson.toJson(dictionaryDynamic);
 
         // Запись JSON строки в файл
-        try (FileWriter writer = new FileWriter("TreeStatic3.json")) {
+        try (FileWriter writer = new FileWriter("TreeStatic4.json")) {
             writer.write(jsson);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         Gson gssson = new Gson();
 
@@ -81,11 +85,11 @@ public class Main {
         System.out.println(jssson);
 
         // Сохраняем JSON-строку в файл
-        try (FileWriter writer = new FileWriter("Node3.json")) {
+        try (FileWriter writer = new FileWriter("Node4.json")) {
             writer.write(jssson);
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
 
 
         /*try {

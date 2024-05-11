@@ -17,8 +17,7 @@ import java.util.Iterator;
 
 public class HuffmanClassicStaticEncode extends Huffman {
 
-    protected HashMap<String, String> huffmanMap;
-    protected Node root;
+
     BitWriter bitWriter;
 
     public HuffmanClassicStaticEncode(BitWriter bitWriter) {
