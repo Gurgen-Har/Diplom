@@ -33,16 +33,5 @@ public class Node {
         this.right = right;
     }
 
-    public Node(Character ch, int freq) {
-        this.ch = ch;
-        this.freq = freq;
-    }
-
-    public Node(Character ch, int freq, Node left, Node right) {
-        this.ch = ch;
-        this.freq = freq;
-        this.left = left;
-        this.right = right;
-    }
 
 }

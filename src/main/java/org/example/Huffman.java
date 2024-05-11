@@ -141,6 +141,7 @@ public abstract class Huffman {
             pq.add(new Node(list, sum, left, right));
         }
 
+
         Node root = pq.peek();
         return root;
     }
@@ -162,6 +163,21 @@ public abstract class Huffman {
 
         root = buildDynamicTree(freq);
         codingDynamic(root, "", dictionaryDynamic);
+    }
+
+    public void sortMap () {
+        List<Map.Entry<String, String>> list = new ArrayList<>(dictionaryClassic.entrySet());
+
+        // Сортировка списка по размеру значений (value)
+        list.sort((o1, o2) -> Integer.compare(o2.getValue().length(), o1.getValue().length()));
+
+        // Создание новой отсортированной HashMap из списка
+        HashMap<String, String> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<String, String> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        dictionaryClassic.clear();
+        dictionaryClassic.putAll(sortedMap);
     }
 
 

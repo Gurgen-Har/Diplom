@@ -4,9 +4,10 @@ import org.apache.commons.io.FilenameUtils;
 import org.example.Classic.HuffmanClassicDecode;
 import org.example.Classic.HuffmanClassicEncode;
 
+import org.example.ClassicStatic.HuffmanClassicStaticDecode;
 import org.example.Dynamic.HuffmanDynamicDecode;
-import org.example.HuffmanClassicStatic;
-import org.example.Static.HuffmanDynamicStatic;
+import org.example.ClassicStatic.HuffmanClassicStaticEncode;
+import org.example.DynamicStatic.HuffmanDynamicStatic;
 import org.example.Dynamic.HuffmanDynamicEncode;
 import org.example.bio.BitReader;
 import org.example.bio.BitWriter;
@@ -453,8 +454,8 @@ public class MainFrame extends JFrame {
     }
 
     private class HuffmanClassicStaticPanel extends JPanel {
-        private HuffmanClassicStatic encoder;
-        private HuffmanClassicStatic decoder;
+        private HuffmanClassicStaticEncode encoder;
+        private HuffmanClassicStaticDecode decoder;
         private final SouthPanel southPanel = new SouthPanel();
 
         public HuffmanClassicStaticPanel() {
@@ -472,29 +473,37 @@ public class MainFrame extends JFrame {
                 StaticEncodeButton.addActionListener(e -> {
                     statusBar.leftStatus.setText("Encoding. Please wait...");
                     EventQueue.invokeLater(new Thread(() -> {
-                        String text = "";
+                        File outputFile = new File(FilenameUtils
+                                .removeExtension(inputFile.getAbsolutePath()) + ".hs4");
+                        OutputStream outputStream = null;
+                        InputStream inputStream = null;
                         try {
-                            text = Files.readString(inputPath, StandardCharsets.UTF_8);
-                            // Теперь у вас есть строка fileContent, содержащая содержимое выбранного файла
-                            // Вы можете сделать что-то с этой строкой здесь
-                        } catch (IOException ex) {
-                            // Обработка ошибок чтения файла
-                            ex.printStackTrace();
+                            outputFile.createNewFile();
+                            outputStream = new FileOutputStream(outputFile);
+                            inputStream = new BufferedInputStream(new FileInputStream(inputFile));
+                            bitWriter = new BitWriter(new BufferedOutputStream(outputStream));
+                            encoder = new HuffmanClassicStaticEncode(bitWriter);
+                            long time0 = System.currentTimeMillis();
+                            encoder.getDictionary();
+                            encoder.encodeAndWrite(inputStream);
+                            encoder.flush();
+                            long timePassed = System.currentTimeMillis() - time0;
+                            statusBar.leftStatus.setText("Encoded in " + (timePassed / 1000.0) + " seconds.");
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        } finally {
+                            try {
+                                outputStream.close();
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
+                            try {
+                                inputStream.close();
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
                         }
-                        long time0 = System.currentTimeMillis();
-                        encoder = new HuffmanClassicStatic(text);
-                        encoder.getHuffmanMap();
-                        String output = encoder.compress();
-                        long timePassed = System.currentTimeMillis() - time0;
-                        statusBar.leftStatus.setText("Encoded in " + (timePassed / 1000.0) + " seconds.");
-                        Path outputPath = Paths.get("E:\\Dat\\"+ inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + ".hs4");
-                        try {
-                            Files.writeString(outputPath, output); // Запись содержимого в файл
-                            System.out.println("Содержимое успешно записано в файл - Static" + outputPath);
-                        } catch (IOException ex) {
-                            // Обработка ошибок записи файла
-                            ex.printStackTrace();
-                        }
+
 
                     }));
                 });
@@ -502,27 +511,38 @@ public class MainFrame extends JFrame {
                 StaticDecodeButton.addActionListener(e -> {
                     statusBar.leftStatus.setText("Decoding. Please wait...");
                     EventQueue.invokeLater(new Thread(() -> {
-                        String text = "";
+                        File outputFile = new File(FilenameUtils.removeExtension(inputFile.getAbsolutePath()) + ".hsd4");
+                        OutputStream outputStream = null;
+                        InputStream inputStream = null;
                         try {
-                            text = Files.readString(inputPath, StandardCharsets.UTF_8);
+                            outputFile.createNewFile();
+                            outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
+                            inputStream = new BufferedInputStream(new FileInputStream(inputFile));
+                            bitReader = new BitReader(inputStream);
+                            decoder = new HuffmanClassicStaticDecode(bitReader);
+                            long time0 = System.currentTimeMillis();
 
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
+                            decoder.getTree();
+                            decoder.decodeAndWrite(outputStream);
+                            long timePassed = System.currentTimeMillis() - time0;
+                            statusBar.leftStatus.setText("Decoded in " + (timePassed / 1000.0) + " seconds.");
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        } finally {
+                            try {
+                                assert outputStream != null;
+                                outputStream.close();
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
+                            try {
+                                assert inputStream != null;
+                                inputStream.close();
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
                         }
-                        long time0 = System.currentTimeMillis();
-                        decoder = new HuffmanClassicStatic(text);
-                        decoder.getTree();
-                        String output = decoder.decompress();
-                        long timePassed = System.currentTimeMillis() - time0;
-                        statusBar.leftStatus.setText("Decoded in " + (timePassed / 1000.0) + " seconds.");
-                        Path outputPath = Paths.get("E:\\Dat\\"+inputPath.getFileName().getName(0).toString().replaceFirst("[.][^.]+$", "") + "hsClasStat.txt");
-                        try {
-                            Files.writeString(outputPath, output); // Запись содержимого в файл
-                            System.out.println("Содержимое успешно записано в файл " + outputPath);
-                        } catch (IOException ex) {
-                            // Обработка ошибок записи файла
-                            ex.printStackTrace();
-                        }
+
                     }));
                 });
 

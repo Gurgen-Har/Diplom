@@ -1,8 +1,10 @@
-package org.example;
+package org.example.DynamicStatic;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import org.example.Huffman;
+import org.example.Node;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,11 +12,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
-public class HuffmanClassicStatic extends Huffman {
+public class HuffmanDynamicStatic extends Huffman {
     protected final String text;
     protected HashMap<String, String> huffmanMap;
     protected Node root;
-    public HuffmanClassicStatic(String text) {
+    public HuffmanDynamicStatic(String text) {
         this.text = text;
 
     }
@@ -22,7 +24,7 @@ public class HuffmanClassicStatic extends Huffman {
     public void getHuffmanMap() {
         String json = "";
         try {
-            json = new String(Files.readAllBytes(Paths.get("TreeStatic2.json")));
+            json = new String(Files.readAllBytes(Paths.get("TreeStatic.json")));
         } catch (IOException e) {
             e.printStackTrace();
 
@@ -39,7 +41,7 @@ public class HuffmanClassicStatic extends Huffman {
 
     }
     public void getTree() {
-        String filePath = "Node2.json";
+        String filePath = "Node.json";
 
         try {
             // Создаем экземпляр Gson

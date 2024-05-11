@@ -20,7 +20,7 @@ public class BitReader {
         if (buffer.isEmpty()) {
             int readByte = inputStream.read();
             if (readByte == -1) {
-                throw new UnsupportedOperationException("Невозможно прочитать бит, поток закончен");
+                return -1;
             }
             buffer.refill((byte) readByte);
         }

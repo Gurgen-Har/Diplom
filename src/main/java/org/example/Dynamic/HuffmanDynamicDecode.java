@@ -103,7 +103,7 @@ public class HuffmanDynamicDecode extends Huffman{
                     root = root.right;
             }while ((root.left != null) && (root.right != null));
             for (int j = 0 ; j < root.list.size(); j++) {
-                int integer = root.list.get(0);
+                int integer = root.list.get(j);
                 outputStream.write(integer);
             }
             root = this.root;

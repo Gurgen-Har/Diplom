@@ -10,47 +10,20 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static org.example.Huffman.buildClassicTree;
+import static org.example.Huffman.codingClassic;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         String text = "This is an example of text, with, commas, and spaces This is an example with commas ";
         //System.out.println(text);
-       /* HuffmanDynamicCoding huf = new HuffmanDynamicCoding(text);
-        //System.out.println(text);
-        huf.createFreq();
-        String gg = huf.compress();
-        HuffmanDynamicDecode hufm = new HuffmanDynamicDecode(gg);
-        //System.out.println(huf.compress());
-        String str = hufm.dataPreparation(gg);
-        System.out.println(str);*/
-        /*HuffmanClassicCoding huffmanClassic = new HuffmanClassicCoding(text);
-        huffmanClassic.createFreq();
-        String out = huffmanClassic.compress();
-        System.out.println(out);
-        HuffmanClassicDecode huffmanClassicDecode = new HuffmanClassicDecode(out);
 
-        System.out.println(huffmanClassicDecode.decompress());*/
-
-        /*Path inputPath = Paths.get("E:\\Dat\\dec.txt");
-        String tex = Files.readString(inputPath, StandardCharsets.UTF_8);
-        HuffmanClassicCoding huffmanClassicCoding = new HuffmanClassicCoding(tex);
-        huffmanClassicCoding.freqAndTree();
-        String out = huffmanClassicCoding.compress();
-        Path outputPath = Paths.get("E:\\Dat\\dec1.txt");
-        Files.writeString(outputPath, out);*/
-        //System.out.println(text);
-        /*HuffmanStaticCoding huffmanStaticCoding = new HuffmanStaticCoding(text);
-        huffmanStaticCoding.tree();
-        String out = huffmanStaticCoding.compress();
-        HuffmanStaticDecoding huffmanStaticDecoding = new HuffmanStaticDecoding(out);
-        huffmanStaticDecoding.setRoot();
-        System.out.println(huffmanStaticDecoding.decompress());*/
-
-
-
-        /*String json = "";
+       /* String json = "";
         try {
-            json = new String(Files.readAllBytes(Paths.get("Data.json")));
+            json = new String(Files.readAllBytes(Paths.get("Data2.json")));
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -64,16 +37,36 @@ public class Main {
 
         // Преобразование JSON в HashMap
         HashMap<String, Integer> hashMap = gson.fromJson(json, type);
-        Node root = Huffman.buildHuffmanTree(hashMap);
-        HashMap<String, String> str = new HashMap<>();
-        Huffman.coding(root,"",str);
+        int[] histogram = new int[256];
+
+        for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
+            int num = (int) entry.getKey().charAt(0);
+            histogram[num] = entry.getValue();
+        }
+
+
+
+
+        Map<String, Integer> freq = new LinkedHashMap<>();
+        for (int i = 0; i < 256; i++) {
+            if (histogram[i] != 0)
+                freq.put(String.valueOf(i), histogram[i]);
+        }
+
+        Node root = buildClassicTree(freq);
+        Map<String, String> dictionaryClassic = new LinkedHashMap<>();
+        codingClassic(root, "", dictionaryClassic);
+
+
+
+
         Gson gsson = new Gson();
 
         // Преобразование HashMap в JSON строку
-        String jsson = gsson.toJson(str);
+        String jsson = gsson.toJson(dictionaryClassic);
 
         // Запись JSON строки в файл
-        try (FileWriter writer = new FileWriter("TreeStatic.json")) {
+        try (FileWriter writer = new FileWriter("TreeStatic3.json")) {
             writer.write(jsson);
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,13 +81,14 @@ public class Main {
         System.out.println(jssson);
 
         // Сохраняем JSON-строку в файл
-        try (FileWriter writer = new FileWriter("Node.json")) {
+        try (FileWriter writer = new FileWriter("Node3.json")) {
             writer.write(jssson);
         } catch (IOException e) {
             e.printStackTrace();
         }*/
 
-        try {
+
+        /*try {
             // Создаем поток вывода в файл
             OutputStream outputStream = new FileOutputStream("output.txt");
 
@@ -107,7 +101,7 @@ public class Main {
             System.out.println("Данные успешно записаны в файл.");
         } catch (IOException e) {
             System.out.println("Ошибка при записи в файл: " + e.getMessage());
-        }
+        }*/
 
 
     }

@@ -59,7 +59,7 @@ public class HuffmanDynamicEncode extends Huffman {
 
         }
 
-        histogramWord.entrySet().removeIf(entry -> entry.getValue() < 1);// установить значение
+        histogramWord.entrySet().removeIf(entry -> entry.getValue() < 2);// установить значение
         for (Map.Entry<List<Integer>, Integer> entry : histogramWord.entrySet()) {
             List<Integer> list = entry.getKey();
 
@@ -138,15 +138,17 @@ public class HuffmanDynamicEncode extends Huffman {
         for (int i = 0, j = 256; i < size; i++, j++) {
             bitWriter.writeNBitValue(counterCodes[j].ordinal(), 2);
         }
-        for (int i = 0, j = 256; i < histogramWord.size(); i++, j++) {
-            for (List<Integer> list : histogramWord.keySet()) {
-                for (Integer integer : list) {
-                    bitWriter.writeNBitValue(integer, 8);
-                }
-                bitWriter.writeNBitValue(0, 8 );//разделитель
-                bitWriter.writeNBitValue(histogramWord.get(list), counterCodes[j].getNrBytes() * 8 );
+        int j = 256;
+        for (List<Integer> list : histogramWord.keySet()) {
+            for (Integer integer : list) {
+                bitWriter.writeNBitValue(integer, 8);
             }
+            bitWriter.writeNBitValue(0, 8 );//разделитель
+            bitWriter.writeNBitValue(histogramWord.get(list), counterCodes[j].getNrBytes() * 8 );
+            j++;
         }
+
+
 
         // при записи в начало в 8 бит вписать количество слов закодированных
     }
