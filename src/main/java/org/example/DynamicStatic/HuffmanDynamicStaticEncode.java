@@ -30,7 +30,7 @@ public class HuffmanDynamicStaticEncode extends Huffman {
     }
 
     public void getTree() {
-        String filePath = "Node4.json";
+        String filePath = "NodeDynamic.json";
 
         try {
             // Создаем экземпляр Gson

@@ -59,7 +59,7 @@ public class HuffmanDynamicEncode extends Huffman {
 
         }
 
-        histogramWord.entrySet().removeIf(entry -> entry.getValue() < 2);// установить значение
+        histogramWord.entrySet().removeIf(entry -> entry.getValue() < 155);// установить значение
         for (Map.Entry<List<Integer>, Integer> entry : histogramWord.entrySet()) {
             List<Integer> list = entry.getKey();
 
@@ -68,6 +68,7 @@ public class HuffmanDynamicEncode extends Huffman {
 
             }
         }
+        System.out.println(histogramWord.size());
         frequency.putAll(histogramWord);
         for (int i = 0; i < this.histogram.length; i++) {
             if (histogram[i] != 0) {

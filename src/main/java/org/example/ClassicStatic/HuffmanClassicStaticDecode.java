@@ -24,7 +24,7 @@ public class HuffmanClassicStaticDecode extends Huffman {
 
     }
     public void getTree() {
-        String filePath = "Node3.json";
+        String filePath = "NodeClassic.json";
 
         try {
             // Создаем экземпляр Gson
@@ -43,7 +43,7 @@ public class HuffmanClassicStaticDecode extends Huffman {
     public void getDictionary() {
         String json = "";
         try {
-            json = new String(Files.readAllBytes(Paths.get("TreeStatic3.json")));
+            json = new String(Files.readAllBytes(Paths.get("TreeStaticClassic.json")));
         } catch (IOException e) {
             e.printStackTrace();
 

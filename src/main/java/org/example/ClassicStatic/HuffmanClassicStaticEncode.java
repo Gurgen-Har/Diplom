@@ -29,7 +29,7 @@ public class HuffmanClassicStaticEncode extends Huffman {
     public void getDictionary() {
         String json = "";
         try {
-            json = new String(Files.readAllBytes(Paths.get("TreeStatic3.json")));
+            json = new String(Files.readAllBytes(Paths.get("TreeStaticClassic.json")));
         } catch (IOException e) {
             e.printStackTrace();
 

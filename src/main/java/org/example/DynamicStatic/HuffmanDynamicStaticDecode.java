@@ -17,7 +17,7 @@ public class HuffmanDynamicStaticDecode extends Huffman {
         this.bitReader = bitReader;
     }
     public void getTree() {
-        String filePath = "Node4.json";
+        String filePath = "NodeDynamic.json";
 
         try {
             // Создаем экземпляр Gson
