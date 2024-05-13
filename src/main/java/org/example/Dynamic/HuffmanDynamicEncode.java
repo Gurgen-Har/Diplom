@@ -59,7 +59,30 @@ public class HuffmanDynamicEncode extends Huffman {
 
         }
 
-        histogramWord.entrySet().removeIf(entry -> entry.getValue() < 155);// установить значение
+        histogramWord.entrySet().removeIf(entry -> entry.getValue() <8);// установить значение
+
+        List<Map.Entry<List<Integer>, Integer>> list1 = new LinkedList<>(histogramWord.entrySet());
+
+        // Сортировка списка по убыванию значения
+        Collections.sort(list1, new Comparator<Map.Entry<List<Integer>, Integer>>() {
+            public int compare(Map.Entry<List<Integer>, Integer> o1, Map.Entry<List<Integer>, Integer> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+
+        // Удаление элементов из списка, начиная с индекса 200, если размер превышает 200
+        if (list1.size() > 200) {
+            list1.subList(200, list1.size()).clear();
+        }
+        histogramWord.clear();
+        // Создание новой HashMap на основе отфильтрованного списка
+        //HashMap<List<Integer>, Integer> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<List<Integer>, Integer> entry : list1) {
+            frequency.put(entry.getKey(), entry.getValue());
+            histogramWord.put(entry.getKey(), entry.getValue());
+        }
+
+
         for (Map.Entry<List<Integer>, Integer> entry : histogramWord.entrySet()) {
             List<Integer> list = entry.getKey();
 
@@ -68,8 +91,14 @@ public class HuffmanDynamicEncode extends Huffman {
 
             }
         }
+
+
+
+
         System.out.println(histogramWord.size());
-        frequency.putAll(histogramWord);
+
+
+        //frequency.putAll(histogramWord);
         for (int i = 0; i < this.histogram.length; i++) {
             if (histogram[i] != 0) {
                 List<Integer> list = new ArrayList<>();
