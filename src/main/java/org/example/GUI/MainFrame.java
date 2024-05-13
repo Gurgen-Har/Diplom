@@ -539,7 +539,6 @@ public class MainFrame extends JFrame {
                             bitReader = new BitReader(inputStream);
                             decoder = new HuffmanClassicStaticDecode(bitReader);
                             long time0 = System.currentTimeMillis();
-
                             decoder.getTree();
                             decoder.decodeAndWrite(outputStream);
                             long timePassed = System.currentTimeMillis() - time0;

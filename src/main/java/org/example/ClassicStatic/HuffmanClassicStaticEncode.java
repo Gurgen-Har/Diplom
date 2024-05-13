@@ -39,6 +39,7 @@ public class HuffmanClassicStaticEncode extends Huffman {
         Gson gson = new Gson();
 
         // Получение типа для десериализации
+
         java.lang.reflect.Type type = new TypeToken<HashMap<String, String>>() {
         }.getType();
 
